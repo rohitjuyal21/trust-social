@@ -19,26 +19,24 @@ import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-const signupSchema = z.object({
-  username: z.string().min(1, "Username is required"),
+const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(1),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type SignUpSchema = z.infer<typeof signupSchema>;
+type SignInSchema = z.infer<typeof signInSchema>;
 
-export default function SignUp() {
+export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const form = useForm<SignUpSchema>({
-    resolver: zodResolver(signupSchema),
+  const form = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: SignUpSchema) => {
+  const onSubmit = (data: SignInSchema) => {
     console.log(data);
   };
 
@@ -50,14 +48,13 @@ export default function SignUp() {
       className="p-4 mt-[72px] flex-1 flex items-center justify-center"
     >
       <div className="bg-accent/30 p-6 rounded-lg border max-w-sm w-full space-y-4">
-        <div className="pb-4">
-          <h4 className="text-4xl text-center font-bold font-oswald mb-2">
-            Create Account
+        <div className="flex gap-2 items-center justify-center mb-2 pb-4">
+          <h4 className="text-3xl md:text-4xl text-center font-bold font-oswald ">
+            Hi, Welcome Back!
           </h4>
-          <p className="text-muted-foreground text-center text-sm">
-            Welcome to Trust Social
-          </p>
+          <Image src="/assets/hi-wave.gif" alt="wave" width={32} height={32} />
         </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-4">
@@ -74,7 +71,7 @@ export default function SignUp() {
               <div className="relative flex items-center w-full justify-between">
                 <div className="bg-border h-[0.5px] flex-1"></div>
                 <div className="flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground uppercase  px-2 shrink-0">
+                  <span className="text-xs text-muted-foreground uppercase px-2 shrink-0">
                     Or continue with
                   </span>
                 </div>
@@ -83,25 +80,12 @@ export default function SignUp() {
 
               <FormField
                 control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Username" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Email" {...field} />
+                      <Input placeholder="Email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,6 +102,7 @@ export default function SignUp() {
                         <Input
                           type={isPasswordVisible ? "text" : "password"}
                           placeholder="Password"
+                          className="pr-10"
                           {...field}
                         />
                         <span
@@ -138,14 +123,14 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <Button>Sign Up</Button>
+              <Button>Sign In</Button>
               <p className="text-xs text-muted-foreground text-center">
-                Already have an account?{" "}
+                Don&apos;t have an accocunt?{" "}
                 <Link
-                  href={"/sign-in"}
+                  href={"/sign-up"}
                   className="text-primary hover:underline"
                 >
-                  Sign in
+                  Sign Up
                 </Link>
               </p>
             </div>
