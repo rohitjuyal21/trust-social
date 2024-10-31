@@ -1,0 +1,136 @@
+import { NextAuthConfig } from "next-auth";
+import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
+import { signInSchema } from "./lib/zod";
+import { User } from "./models/user";
+import dbConnect from "./lib/dbConnect";
+import bcryptjs from "bcryptjs";
+
+const publicRoutes = ["/sign-in", "/sign-up"];
+const authRoutes = ["/sign-in", "/sign-up"];
+
+export default {
+  providers: [
+    Google,
+    Credentials({
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "Enter your email",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Enter your password",
+        },
+      },
+
+      async authorize(credentials) {
+        try {
+          await dbConnect();
+
+          const parsedCredentials = signInSchema.safeParse(credentials);
+          if (!parsedCredentials.success) {
+            return null;
+          }
+
+          const user = await User.findOne({ email: credentials?.email });
+
+          if (!user) {
+            return null;
+          }
+
+          if (!user.password) {
+            console.log("User has no password - OAuth provider account");
+            return null;
+          }
+
+          const isPasswordValid = await bcryptjs.compare(
+            credentials?.password as string,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            return null;
+          }
+
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.username,
+            image: user.profileImage,
+          };
+        } catch (error) {
+          console.error("Authorization error:", error);
+          return null;
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async authorized({ request: { nextUrl }, auth }) {
+      const isLoggedIn = !!auth?.user;
+      const { pathname } = nextUrl;
+
+      if (publicRoutes.includes(pathname)) {
+        return true;
+      }
+
+      if (authRoutes.includes(pathname)) {
+        if (isLoggedIn) {
+          return Response.redirect(new URL("/", nextUrl));
+        }
+
+        return true;
+      }
+
+      return isLoggedIn;
+    },
+
+    async signIn({ user, account }) {
+      try {
+        await dbConnect();
+
+        if (!user.email) {
+          return false;
+        }
+
+        if (account?.provider === "google") {
+          const existingUser = await User.findOne({ email: user.email });
+
+          if (!existingUser) {
+            await User.create({
+              username: user.name,
+              email: user.email,
+              profileImage: user.image,
+            });
+          }
+        }
+
+        return true;
+      } catch (error) {
+        console.error("SignIn callback error:", error);
+        return false;
+      }
+    },
+    jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id as string;
+      }
+
+      if (trigger === "update" && session) {
+        token = { ...token, ...session };
+      }
+
+      return token;
+    },
+    session({ session, token }) {
+      session.user.id = token.id;
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/sign-in",
+  },
+} satisfies NextAuthConfig;

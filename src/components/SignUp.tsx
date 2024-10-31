@@ -18,19 +18,19 @@ import { Input } from "./ui/input";
 import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { signUpSchema } from "@/lib/zod";
+import {
+  handleCredentialsSignIn,
+  handleCredentialsSignUp,
+  handleGoogleSignin,
+} from "@/app/actions/authActions";
 
-const signupSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(1),
-});
-
-type SignUpSchema = z.infer<typeof signupSchema>;
+type SignUpSchema = z.infer<typeof signUpSchema>;
 
 export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const form = useForm<SignUpSchema>({
-    resolver: zodResolver(signupSchema),
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -38,8 +38,19 @@ export default function SignUp() {
     },
   });
 
-  const onSubmit = (data: SignUpSchema) => {
-    console.log(data);
+  const onSubmit = async (data: SignUpSchema) => {
+    try {
+      const result = await handleCredentialsSignUp(data);
+      if (result.success) {
+        const valuesForSignin = {
+          email: data.email,
+          password: data.password,
+        };
+        await handleCredentialsSignIn(valuesForSignin);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -61,7 +72,12 @@ export default function SignUp() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-4">
-              <Button type="button" variant={"outline"} className="w-full">
+              <Button
+                onClick={handleGoogleSignin}
+                type="button"
+                variant={"outline"}
+                className="w-full"
+              >
                 <Image
                   src="/assets/google-logo.png"
                   alt="google-logo"

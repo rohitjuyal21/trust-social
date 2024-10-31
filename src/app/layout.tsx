@@ -4,6 +4,7 @@ import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/Theme/ThemeProvider";
 import Header from "@/components/Header";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,8 +34,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          {children}
+          <SessionProvider>
+            <Header />
+            {children}
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

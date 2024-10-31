@@ -18,11 +18,12 @@ import { Input } from "./ui/input";
 import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-
-const signInSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
+import { useSession } from "next-auth/react";
+import { signInSchema } from "@/lib/zod";
+import {
+  handleCredentialsSignIn,
+  handleGoogleSignin,
+} from "@/app/actions/authActions";
 
 type SignInSchema = z.infer<typeof signInSchema>;
 
@@ -36,9 +37,17 @@ export default function SignIn() {
     },
   });
 
-  const onSubmit = (data: SignInSchema) => {
-    console.log(data);
+  const onSubmit = async (data: SignInSchema) => {
+    try {
+      await handleCredentialsSignIn(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const session = useSession();
+
+  console.log(session);
 
   return (
     <motion.div
@@ -58,7 +67,12 @@ export default function SignIn() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-4">
-              <Button type="button" variant={"outline"} className="w-full">
+              <Button
+                onClick={handleGoogleSignin}
+                type="button"
+                variant={"outline"}
+                className="w-full"
+              >
                 <Image
                   src="/assets/google-logo.png"
                   alt="google-logo"
