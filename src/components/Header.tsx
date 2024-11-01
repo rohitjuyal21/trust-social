@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import ThemeToggle from "./Theme/ThemeToggle";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
+import ProfileMenu from "./ProfileMenu";
 
 export default function Header() {
   const { data: session } = useSession();
@@ -34,18 +34,7 @@ export default function Header() {
         <div className="flex gap-2 items-center">
           <ThemeToggle />
           {user ? (
-            <div className="rounded-full overflow-hidden">
-              <Image
-                src={
-                  user.image! ||
-                  "https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
-                }
-                alt={user.name || "User"}
-                width={32}
-                height={32}
-                className="object-cover"
-              />
-            </div>
+            <ProfileMenu />
           ) : (
             <>
               {" "}

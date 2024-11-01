@@ -6,7 +6,7 @@ import { User } from "./models/user";
 import dbConnect from "./lib/dbConnect";
 import bcryptjs from "bcryptjs";
 
-const publicRoutes = ["/sign-in", "/sign-up"];
+const publicRoutes = ["/", "/sign-in", "/sign-up"];
 const authRoutes = ["/sign-in", "/sign-up"];
 
 export default {
@@ -74,15 +74,14 @@ export default {
       const { pathname } = nextUrl;
 
       if (publicRoutes.includes(pathname)) {
+        if (authRoutes.includes(pathname) && isLoggedIn) {
+          return Response.redirect(new URL("/dashboard", nextUrl));
+        }
         return true;
       }
 
-      if (authRoutes.includes(pathname)) {
-        if (isLoggedIn) {
-          return Response.redirect(new URL("/", nextUrl));
-        }
-
-        return true;
+      if (!isLoggedIn) {
+        return Response.redirect(new URL("/sign-in", nextUrl));
       }
 
       return isLoggedIn;

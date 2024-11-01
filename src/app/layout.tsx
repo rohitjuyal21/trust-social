@@ -5,6 +5,7 @@ import "./globals.css";
 import ThemeProvider from "@/components/Theme/ThemeProvider";
 import Header from "@/components/Header";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,7 +37,10 @@ export default function RootLayout({
         >
           <SessionProvider>
             <Header />
-            {children}
+            <main className="mt-[72px] w-full flex items-center justify-center">
+              {children}
+            </main>
+            <Toaster richColors />
           </SessionProvider>
         </ThemeProvider>
       </body>

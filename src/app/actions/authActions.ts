@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn, signOut } from "@/auth";
+import { signIn } from "@/auth";
 import dbConnect from "@/lib/dbConnect";
 import { signUpSchema } from "@/lib/zod";
 import { User } from "@/models/user";
@@ -18,18 +18,20 @@ export async function handleCredentialsSignIn({
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/",
+      redirect: false,
     });
-    return { success: true };
+    return { success: true, message: "Signed In successfully!" };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
           return {
+            success: false,
             message: "Invalid credentials",
           };
         default:
           return {
+            success: false,
             message: "Something went wrong.",
           };
       }
@@ -40,10 +42,6 @@ export async function handleCredentialsSignIn({
 
 export async function handleGoogleSignin() {
   await signIn("google", { redirectTo: "/" });
-}
-
-export async function handleSignOut() {
-  await signOut();
 }
 
 export async function handleCredentialsSignUp({

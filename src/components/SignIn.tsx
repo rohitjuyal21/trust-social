@@ -18,17 +18,23 @@ import { Input } from "./ui/input";
 import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { signInSchema } from "@/lib/zod";
 import {
   handleCredentialsSignIn,
   handleGoogleSignin,
 } from "@/app/actions/authActions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import ClipLoader from "react-spinners/ClipLoader";
+import { useSession } from "next-auth/react";
 
 type SignInSchema = z.infer<typeof signInSchema>;
 
 export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { update: updateSession } = useSession();
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -38,30 +44,42 @@ export default function SignIn() {
   });
 
   const onSubmit = async (data: SignInSchema) => {
+    setIsLoading(true);
     try {
-      await handleCredentialsSignIn(data);
+      const signIn = await handleCredentialsSignIn(data);
+      if (signIn.success) {
+        await updateSession();
+        toast.success("Successfully signed in!");
+        router.push("/dashboard");
+      } else {
+        toast.error(signIn.message);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const session = useSession();
-
-  console.log(session);
 
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ ease: "easeInOut", duration: 0.4 }}
-      className="p-4 mt-[72px] flex-1 flex items-center justify-center"
+      className="p-4 flex-1 flex items-center justify-center"
     >
       <div className="bg-accent/30 p-6 rounded-lg border max-w-sm w-full space-y-4">
         <div className="flex gap-2 items-center justify-center mb-2 pb-4">
           <h4 className="text-3xl md:text-4xl text-center font-bold font-oswald ">
             Hi, Welcome Back!
           </h4>
-          <Image src="/assets/hi-wave.gif" alt="wave" width={32} height={32} />
+          {/* <Image
+            src="/assets/hi-wave.gif"
+            alt="wave"
+            width={32}
+            height={32}
+            unoptimized
+          /> */}
         </div>
 
         <Form {...form}>
@@ -137,7 +155,18 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
-              <Button>Sign In</Button>
+              <Button disabled={isLoading}>
+                {isLoading ? (
+                  <ClipLoader
+                    color="hsl(var(--foreground))"
+                    size={28}
+                    loading={isLoading}
+                    className="text-foreground"
+                  />
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
               <p className="text-xs text-muted-foreground text-center">
                 Don&apos;t have an accocunt?{" "}
                 <Link

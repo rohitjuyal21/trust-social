@@ -24,11 +24,19 @@ import {
   handleCredentialsSignUp,
   handleGoogleSignin,
 } from "@/app/actions/authActions";
+import { useRouter } from "next/navigation";
+import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 type SignUpSchema = z.infer<typeof signUpSchema>;
 
 export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { update: updateSession } = useSession();
+
   const form = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -39,17 +47,31 @@ export default function SignUp() {
   });
 
   const onSubmit = async (data: SignUpSchema) => {
+    setIsLoading(true);
     try {
       const result = await handleCredentialsSignUp(data);
+      console.log(result);
       if (result.success) {
-        const valuesForSignin = {
+        const signInResult = await handleCredentialsSignIn({
           email: data.email,
           password: data.password,
-        };
-        await handleCredentialsSignIn(valuesForSignin);
+        });
+
+        if (signInResult.success) {
+          await updateSession();
+          toast.success("Sign Up successful!");
+          router.replace("/dashboard");
+        } else {
+          toast.error(signInResult.message);
+        }
+      } else {
+        toast.error(result.message);
       }
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,7 +80,7 @@ export default function SignUp() {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ ease: "easeInOut", duration: 0.4 }}
-      className="p-4 mt-[72px] flex-1 flex items-center justify-center"
+      className="p-4 flex-1 flex items-center justify-center"
     >
       <div className="bg-accent/30 p-6 rounded-lg border max-w-sm w-full space-y-4">
         <div className="pb-4">
@@ -154,7 +176,18 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <Button>Sign Up</Button>
+              <Button disabled={isLoading}>
+                {isLoading ? (
+                  <ClipLoader
+                    color="hsl(var(--foreground))"
+                    size={28}
+                    loading={isLoading}
+                    className="text-foreground"
+                  />
+                ) : (
+                  "Sign Up"
+                )}
+              </Button>
               <p className="text-xs text-muted-foreground text-center">
                 Already have an account?{" "}
                 <Link
