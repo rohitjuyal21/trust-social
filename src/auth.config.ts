@@ -87,35 +87,12 @@ export default {
       return isLoggedIn;
     },
 
-    async signIn({ user, account }) {
-      try {
-        await dbConnect();
-
-        if (!user.email) {
-          return false;
-        }
-
-        if (account?.provider === "google") {
-          const existingUser = await User.findOne({ email: user.email });
-
-          if (!existingUser) {
-            await User.create({
-              username: user.name,
-              email: user.email,
-              profileImage: user.image,
-            });
-          }
-        }
-
-        return true;
-      } catch (error) {
-        console.error("SignIn callback error:", error);
-        return false;
-      }
-    },
     jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id as string;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
       }
 
       if (trigger === "update" && session) {

@@ -16,14 +16,14 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { signInSchema } from "@/lib/zod";
 import {
   handleCredentialsSignIn,
   handleGoogleSignin,
 } from "@/app/actions/authActions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useSession } from "next-auth/react";
@@ -34,7 +34,10 @@ export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const params = useSearchParams();
+  const error = params.get("error");
   const { update: updateSession } = useSession();
+
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -61,6 +64,27 @@ export default function SignIn() {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      router.replace("/sign-in");
+      setTimeout(() => {
+        switch (error) {
+          case "OAuthAccountNotLinked":
+            toast.error(
+              "This email is already registered. Please sign in with your email and password.",
+              {
+                duration: 3000,
+              }
+            );
+            break;
+          default:
+            toast.error("An unexpected error occurred. Please try again.", {
+              duration: 3000,
+            });
+        }
+      }, 100);
+    }
+  }, [error, router]);
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}

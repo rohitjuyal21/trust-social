@@ -50,7 +50,6 @@ export default function SignUp() {
     setIsLoading(true);
     try {
       const result = await handleCredentialsSignUp(data);
-      console.log(result);
       if (result.success) {
         const signInResult = await handleCredentialsSignIn({
           email: data.email,
@@ -68,8 +67,8 @@ export default function SignUp() {
         toast.error(result.message);
       }
     } catch (error) {
-      console.log(error);
       toast.error("Something went wrong.");
+      throw error;
     } finally {
       setIsLoading(false);
     }
