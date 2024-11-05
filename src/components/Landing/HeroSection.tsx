@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
@@ -40,9 +41,11 @@ const HeroSection = () => {
             delay: 0.2,
           }}
         >
-          <Button size={"lg"} className="group">
-            Get Started
-            <ArrowRight className="size-5 group-hover:translate-x-1 transition duration-300" />
+          <Button size={"lg"} className="group" asChild>
+            <Link href={"/dashboard"}>
+              Get Started
+              <ArrowRight className="size-5 group-hover:translate-x-1 transition duration-300" />
+            </Link>
           </Button>
         </motion.div>
       </div>

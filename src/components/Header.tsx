@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 
-import Logo from "./Logo";
-
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import ThemeToggle from "./Theme/ThemeToggle";
 import { useSession } from "next-auth/react";
 import ProfileMenu from "./ProfileMenu";
+import Logo from "./svg/Logo";
 
 export default function Header() {
   const { data: session } = useSession();
