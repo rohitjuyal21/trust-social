@@ -1,8 +1,12 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { ArchiveX, Plus } from "lucide-react";
 import { Button } from "../ui/button";
+import CreateCollectionModal from "./CreateCollectionModal";
 
 const CollectionsWrapper = () => {
+  const [isCreateCollectionModalOpen, setIsCreateCollectionModalOpen] =
+    useState(false);
   const collections = 0;
 
   return (
@@ -19,13 +23,17 @@ const CollectionsWrapper = () => {
               Create a collection to collect testimonials
             </p>
           </div>
-          <Button>
+          <Button onClick={() => setIsCreateCollectionModalOpen(true)}>
             Create Collection <Plus className="size-4" />
           </Button>
         </div>
       ) : (
         ""
       )}
+      <CreateCollectionModal
+        isOpen={isCreateCollectionModalOpen}
+        setIsOpen={setIsCreateCollectionModalOpen}
+      />
     </div>
   );
 };
