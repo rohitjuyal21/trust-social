@@ -16,6 +16,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { Textarea } from "../ui/textarea";
 
 export default function BasicSettings() {
   const logoInputRef = useRef<HTMLInputElement>(null);
@@ -151,6 +152,40 @@ export default function BasicSettings() {
                       onChange={handleFileChange}
                     />
                   </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="headerTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Header Title <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Header Title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="customMessage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Your custom message <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Write a custom message for your customers"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

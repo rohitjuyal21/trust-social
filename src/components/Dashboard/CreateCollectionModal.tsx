@@ -21,14 +21,14 @@ export default function CreateCollectionModal({
 }: CreateCollectionModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-screen-xl rounded-lg w-[95%]">
+      <DialogContent className="max-w-screen-lg rounded-lg ">
         <VisuallyHidden.Root>
           <DialogTitle>Create Collection</DialogTitle>
         </VisuallyHidden.Root>
         <VisuallyHidden.Root>
           <DialogDescription>Description goes here</DialogDescription>
         </VisuallyHidden.Root>
-        <div className="py-4 flex md:flex-row flex-col gap-8">
+        <div className="py-4 flex md:flex-row md:items-start flex-col gap-8">
           <LivePreview />
           <EditPreview />
         </div>
