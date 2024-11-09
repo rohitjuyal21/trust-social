@@ -70,6 +70,7 @@ export default function CreateCollectionModal({
             <div className="md:w-[45%]">
               {activeTab === "basic-settings" ? (
                 <TestimonialPagePreview
+                  logo={form.watch("collectionLogo")}
                   header={form.watch("headerTitle")}
                   customMessage={form.watch("customMessage")}
                   questions={form.watch("questions")}

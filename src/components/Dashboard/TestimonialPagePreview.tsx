@@ -4,8 +4,10 @@ import Logo from "../svg/Logo";
 import { Button } from "../ui/button";
 import { Pencil } from "lucide-react";
 import PreviewBadge from "./PreviewBadge";
+import Image from "next/image";
 
 interface LivePreviewProps {
+  logo: string | undefined;
   header: string;
   customMessage: string;
   questions: string[];
@@ -13,6 +15,7 @@ interface LivePreviewProps {
 }
 
 export default function TestimonialPagePreview({
+  logo,
   header,
   customMessage,
   questions,
@@ -25,7 +28,14 @@ export default function TestimonialPagePreview({
       </div>
 
       <div className="flex flex-col items-center justify-center gap-4">
-        <Logo className="h-20 w-20" />
+        {logo ? (
+          <div className="relative h-20 w-20 rounded-full overflow-hidden">
+            <Image src={logo} alt="logo" fill className="rounded-full" />
+          </div>
+        ) : (
+          <Logo className="h-20 w-20" />
+        )}
+
         <h1 className="text-3xl font-bold text-center">
           {header ? header : "Header goes here..."}
         </h1>

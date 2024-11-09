@@ -1,5 +1,5 @@
 import { collectionSchema } from "@/lib/zod";
-import React, { useRef, useState } from "react";
+import React from "react";
 import {
   FormControl,
   FormDescription,
@@ -11,36 +11,26 @@ import {
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Plus, PlusCircle, Trash2, X } from "lucide-react";
+import { Plus, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { SketchPicker } from "react-color";
 import { UseFormReturn } from "react-hook-form";
+import ImageUpload from "./ImageUpload";
 
 interface BasicSettingsProps {
   form: UseFormReturn<z.infer<typeof collectionSchema>>;
 }
 
 export default function BasicSettings({ form }: BasicSettingsProps) {
-  const logoInputRef = useRef<HTMLInputElement>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-
-  const handleUploadLogo = () => {
-    if (logoInputRef.current) {
-      logoInputRef.current.click();
-    }
-  };
-
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
     if (file) {
       const base64 = await convertToBase64(file);
-      setLogoPreview(base64 as string);
-      // Update the form field with the base64 string
       form.setValue("collectionLogo", base64 as string);
     }
   };
@@ -57,7 +47,6 @@ export default function BasicSettings({ form }: BasicSettingsProps) {
   };
 
   const handleClearLogo = () => {
-    setLogoPreview(null);
     form.setValue("collectionLogo", "");
   };
 
@@ -116,48 +105,17 @@ export default function BasicSettings({ form }: BasicSettingsProps) {
         <FormField
           control={form.control}
           name="collectionLogo"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>
                 Collection Logo <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <div className="flex gap-4 items-center">
-                  <div className="w-16 h-16 rounded-full relative overflow-hidden border">
-                    {logoPreview ? (
-                      <Image src={logoPreview} alt="Collection Logo" fill />
-                    ) : (
-                      <div className="w-16 h-16 bg-accent"></div>
-                    )}
-                  </div>
-                  <Button
-                    onClick={handleUploadLogo}
-                    variant="outline"
-                    size="sm"
-                    type="button"
-                  >
-                    Upload
-                  </Button>
-                  {logoPreview && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="w-5 h-5 rounded-full"
-                      type="button"
-                      onClick={handleClearLogo}
-                    >
-                      <X className="size-3" />
-                    </Button>
-                  )}
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    placeholder="Collection Name"
-                    className="sr-only"
-                    ref={logoInputRef}
-                    onChange={handleFileChange}
-                  />
-                </div>
+                <ImageUpload
+                  image={field.value}
+                  onChange={handleFileChange}
+                  onClear={handleClearLogo}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
