@@ -1,9 +1,6 @@
 import { collectionSchema } from "@/lib/zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -14,35 +11,21 @@ import {
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { PlusCircle, Trash2, X } from "lucide-react";
+import { Plus, PlusCircle, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
-import { collectionQuestions } from "@/config/collection-questions";
 import { Switch } from "../ui/switch";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { SketchPicker } from "react-color";
+import { UseFormReturn } from "react-hook-form";
 
-export default function BasicSettings() {
+interface BasicSettingsProps {
+  form: UseFormReturn<z.infer<typeof collectionSchema>>;
+}
+
+export default function BasicSettings({ form }: BasicSettingsProps) {
   const logoInputRef = useRef<HTMLInputElement>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [questions, setquestions] = useState(collectionQuestions);
-
-  const form = useForm<z.infer<typeof collectionSchema>>({
-    resolver: zodResolver(
-      collectionSchema.pick({
-        collectionName: true,
-        collectionLogo: true,
-        headerTitle: true,
-        customMessage: true,
-        questions: true,
-        collectStarRatings: true,
-        customButtonColor: true,
-      })
-    ),
-  });
-  console.log(form.formState.errors);
-
-  const onSubmit = (values: z.infer<typeof collectionSchema>) => {
-    console.log(values);
-  };
 
   const handleUploadLogo = () => {
     if (logoInputRef.current) {
@@ -79,29 +62,24 @@ export default function BasicSettings() {
   };
 
   const handleAddQuestion = () => {
-    const newQuestion = {
-      id: new Date().toISOString(),
-      question: "",
-    };
-    setquestions([...questions, newQuestion]);
+    const newQuestion = "";
+    form.setValue("questions", [...form.getValues("questions"), newQuestion]);
   };
 
-  const handleQuestionChange = (index: string, value: string) => {
-    const updatedQuestions = questions.map((question) =>
-      question.id === index ? { ...question, question: value } : question
-    );
+  const handleQuestionChange = (id: number, value: string) => {
+    const updatedQuestions = form
+      .getValues("questions")
+      .map((question, index) => (id === index ? value : question));
 
-    setquestions(updatedQuestions);
+    form.setValue("questions", updatedQuestions);
   };
 
-  const handleRemoveQuestion = (index: string) => {
-    const updatedQuestions = questions.filter(
-      (question) => question.id !== index
-    );
-    setquestions(updatedQuestions);
+  const handleRemoveQuestion = (id: number) => {
+    const updatedQuestions = form
+      .getValues("questions")
+      .filter((_, index) => id !== index);
+    form.setValue("questions", updatedQuestions);
   };
-
-  console.log(questions);
 
   return (
     <div className="mt-6 space-y-6">
@@ -114,178 +92,214 @@ export default function BasicSettings() {
         </p>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="collectionName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Collection Name <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Collection Name" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Public URL is: localhost:3000/rohit-juyal
-                  {/* change this in production */}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="collectionLogo"
-            render={() => (
-              <FormItem>
-                <FormLabel>
-                  Collection Logo <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <div className="flex gap-4 items-center">
-                    <div className="w-16 h-16 rounded-full relative overflow-hidden border">
-                      {logoPreview ? (
-                        <Image src={logoPreview} alt="Collection Logo" fill />
-                      ) : (
-                        <div className="w-16 h-16 bg-accent"></div>
-                      )}
-                    </div>
+      <div className="flex flex-col gap-6">
+        <FormField
+          control={form.control}
+          name="collectionName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Collection Name <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Collection Name" {...field} />
+              </FormControl>
+              <FormDescription>
+                Public URL is: localhost:3000/
+                {field.value || "your-collection"}
+                {/* change this in production */}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="collectionLogo"
+          render={() => (
+            <FormItem>
+              <FormLabel>
+                Collection Logo <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <div className="flex gap-4 items-center">
+                  <div className="w-16 h-16 rounded-full relative overflow-hidden border">
+                    {logoPreview ? (
+                      <Image src={logoPreview} alt="Collection Logo" fill />
+                    ) : (
+                      <div className="w-16 h-16 bg-accent"></div>
+                    )}
+                  </div>
+                  <Button
+                    onClick={handleUploadLogo}
+                    variant="outline"
+                    size="sm"
+                    type="button"
+                  >
+                    Upload
+                  </Button>
+                  {logoPreview && (
                     <Button
-                      onClick={handleUploadLogo}
                       variant="outline"
+                      size="icon"
+                      className="w-5 h-5 rounded-full"
+                      type="button"
+                      onClick={handleClearLogo}
+                    >
+                      <X className="size-3" />
+                    </Button>
+                  )}
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    placeholder="Collection Name"
+                    className="sr-only"
+                    ref={logoInputRef}
+                    onChange={handleFileChange}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="headerTitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Header Title <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Header Title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="customMessage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Your custom message <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Write a custom message for your customers"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="questions"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Questions <span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <div className="space-y-2">
+                  {field.value.map((question, index) => (
+                    <div key={index} className="flex gap-2 items-center">
+                      <Input
+                        value={question}
+                        onChange={(e) =>
+                          handleQuestionChange(index, e.target.value)
+                        }
+                        placeholder="Add a short question"
+                      />
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="flex-shrink-0"
+                        onClick={() => handleRemoveQuestion(index)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  {form.watch("questions").length < 5 && (
+                    <Button
+                      variant="ghost"
                       size="sm"
                       type="button"
+                      onClick={handleAddQuestion}
                     >
-                      Upload
+                      Add question (upto 5) <PlusCircle className="w-4 h-4" />
                     </Button>
-                    {logoPreview && (
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="w-5 h-5 rounded-full"
-                        type="button"
-                        onClick={handleClearLogo}
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      placeholder="Collection Name"
-                      className="sr-only"
-                      ref={logoInputRef}
-                      onChange={handleFileChange}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="headerTitle"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Header Title <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Header Title" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="customMessage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Your custom message <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Write a custom message for your customers"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="questions"
-            render={() => (
-              <FormItem>
-                <FormLabel>
-                  Questions <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <div className="space-y-2">
-                    {questions.map((question) => (
-                      <div
-                        key={question.id}
-                        className="flex gap-2 items-center"
-                      >
-                        <Input
-                          value={question.question}
-                          onChange={(e) =>
-                            handleQuestionChange(question.id, e.target.value)
-                          }
-                          placeholder="Add a short question"
+                  )}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="collectStarRatings"
+          render={({ field }) => (
+            <FormItem className="flex gap-4 items-center space-y-0">
+              <FormLabel>Collect star ratings</FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="mt-0"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="customButtonColor"
+          render={({ field }) => (
+            <FormItem className="flex flex-col max-w-52">
+              <FormLabel>Custom button color</FormLabel>
+              <FormControl>
+                <div className="flex gap-2">
+                  <Input {...field} placeholder="Pick a color" />
+                  <Popover>
+                    <PopoverTrigger>
+                      <div className="w-10 h-10 border rounded-md shrink-0 relative overflow-hidden">
+                        <Image
+                          src="/assets/checkerboard.png"
+                          alt="checkerboard"
+                          className="absolute inset-0"
+                          fill
                         />
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="flex-shrink-0"
-                          onClick={() => handleRemoveQuestion(question.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        <div
+                          className="absolute inset-0"
+                          style={{ backgroundColor: field.value }}
+                        ></div>
                       </div>
-                    ))}
-                    {questions.length < 5 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        type="button"
-                        onClick={handleAddQuestion}
-                      >
-                        Add question (upto 5) <PlusCircle className="w-4 h-4" />
-                      </Button>
-                    )}
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="collectStarRatings"
-            render={({ field }) => (
-              <FormItem className="flex gap-2 items-center space-y-0">
-                <FormLabel>Collect star ratings</FormLabel>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    className="mt-0"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="p-0 w-fit">
+                      <SketchPicker
+                        color={field.value}
+                        onChange={(color) => field.onChange(color.hex)}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button className="w-full">
+          Create new Collection <Plus className="size-4" />
+        </Button>
+      </div>
     </div>
   );
 }
