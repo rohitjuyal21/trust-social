@@ -4,9 +4,9 @@ import Image from "next/image";
 
 interface ThankYouPagePreviewProps {
   thankyouPage: {
-    thankYouPageTitle: string;
-    thankYouPageMessage: string;
-    thankYouPageImage: string;
+    thankYouPageTitle?: string;
+    thankYouPageMessage?: string;
+    thankYouPageImage?: string;
   };
 }
 
@@ -21,21 +21,33 @@ export default function ThankYouPagePreview({
         <PreviewBadge text="Thank you page - Live preview" />
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-4">
-        <div className="relative w-full aspect-video border rounded-md overflow-hidden">
+      <div className="flex flex-col items-center justify-center gap-4 h-full">
+        <div className="relative w-full h-full border rounded-md overflow-hidden">
           {thankYouPageImage ? (
-            <Image src={thankYouPageImage} alt="thankyou" fill />
+            <Image
+              src={thankYouPageImage}
+              alt="thankyou"
+              width={0}
+              height={0}
+              className="w-full h-full"
+            />
           ) : (
-            <Image src="/assets/thankyou.jpg" alt="thankyou" fill />
+            <Image
+              src="/assets/thankyou.jpg"
+              alt="thankyou"
+              width={0}
+              height={0}
+              className="w-full h-full"
+            />
           )}
         </div>
         <h1 className="text-3xl font-bold text-center">
-          {thankYouPageTitle ? thankYouPageTitle : "Thank you!"}
+          {thankYouPageTitle ? thankYouPageTitle : "Thank you! 🎉"}
         </h1>
         <p className="text-center text-muted-foreground">
           {thankYouPageMessage
             ? thankYouPageMessage
-            : " Your custom message goes here..."}
+            : "Your testimonial brightens our day! Thanks for being an amazing part of our journey!"}
         </p>
       </div>
     </div>

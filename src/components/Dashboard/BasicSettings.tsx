@@ -19,12 +19,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { SketchPicker } from "react-color";
 import { UseFormReturn } from "react-hook-form";
 import ImageUpload from "./ImageUpload";
+import LoadingButton from "../LoadingButton";
 
 interface BasicSettingsProps {
   form: UseFormReturn<z.infer<typeof collectionSchema>>;
+  isLoading: boolean;
 }
 
-export default function BasicSettings({ form }: BasicSettingsProps) {
+export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -70,6 +72,13 @@ export default function BasicSettings({ form }: BasicSettingsProps) {
     form.setValue("questions", updatedQuestions);
   };
 
+  const convertToKebabCase = (string: string) => {
+    return string
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/[\s_]+/g, "-")
+      .toLowerCase();
+  };
+
   return (
     <div className="mt-6 space-y-6">
       <div className="space-y-1">
@@ -95,7 +104,7 @@ export default function BasicSettings({ form }: BasicSettingsProps) {
               </FormControl>
               <FormDescription>
                 Public URL is: localhost:3000/
-                {field.value || "your-collection"}
+                {convertToKebabCase(field.value) || "your-collection"}
                 {/* change this in production */}
               </FormDescription>
               <FormMessage />
@@ -254,9 +263,9 @@ export default function BasicSettings({ form }: BasicSettingsProps) {
             </FormItem>
           )}
         />
-        <Button className="w-full">
+        <LoadingButton isLoading={isLoading}>
           Create new Collection <Plus className="size-4" />
-        </Button>
+        </LoadingButton>
       </div>
     </div>
   );

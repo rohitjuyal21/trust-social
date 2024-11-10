@@ -31,8 +31,8 @@ export const collectionSchema = object({
   collectStarRatings: boolean(),
   customButtonColor: string().optional(),
   thankYouPage: object({
-    thankYouPageTitle: string().min(1, "Title is required"),
-    thankYouPageMessage: string().min(1, "Message is required"),
-    thankYouPageImage: string().min(1, "Image is required"),
+    thankYouPageTitle: string().optional(),
+    thankYouPageMessage: string().optional(),
+    thankYouPageImage: string().optional(),
   }),
 });
