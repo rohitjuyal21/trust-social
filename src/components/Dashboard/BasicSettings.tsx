@@ -20,6 +20,7 @@ import { SketchPicker } from "react-color";
 import { UseFormReturn } from "react-hook-form";
 import ImageUpload from "./ImageUpload";
 import LoadingButton from "../LoadingButton";
+import { convertToKebabCase } from "@/lib/stringUtils";
 
 interface BasicSettingsProps {
   form: UseFormReturn<z.infer<typeof collectionSchema>>;
@@ -70,13 +71,6 @@ export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
       .getValues("questions")
       .filter((_, index) => id !== index);
     form.setValue("questions", updatedQuestions);
-  };
-
-  const convertToKebabCase = (string: string) => {
-    return string
-      .replace(/([a-z])([A-Z])/g, "$1-$2")
-      .replace(/[\s_]+/g, "-")
-      .toLowerCase();
   };
 
   return (

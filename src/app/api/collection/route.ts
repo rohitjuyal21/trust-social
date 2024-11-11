@@ -13,6 +13,17 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
+    const collectionExist = await Collection.findOne({
+      publicUrl: body.publicUrl,
+    });
+
+    if (collectionExist) {
+      return Response.json(
+        { message: "Public URL already exists" },
+        { status: 400 }
+      );
+    }
+
     const collection = await Collection.create({
       ...body,
       createdBy: session.user.id,

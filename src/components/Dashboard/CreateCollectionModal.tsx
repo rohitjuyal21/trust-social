@@ -20,6 +20,7 @@ import TestimonialPagePreview from "./TestimonialPagePreview";
 import ThankYouPagePreview from "./ThankYouPagePreview";
 import ThankYouPage from "./ThankYouPage";
 import { toast } from "sonner";
+import { convertToKebabCase } from "@/lib/stringUtils";
 
 interface CreateCollectionModalProps {
   isOpen: boolean;
@@ -78,15 +79,18 @@ export default function CreateCollectionModal({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(finalValues),
+        body: JSON.stringify({
+          ...finalValues,
+          publicUrl: convertToKebabCase(values.collectionName),
+        }),
       });
       const data = await response.json();
-      console.log(data);
       if (response.ok) {
         toast.success("Collection created successfully");
         handelDialogClose();
         form.reset();
       } else {
+        toast.error(data.message);
         throw new Error("Failed to create collection");
       }
     } catch (error) {
@@ -95,9 +99,11 @@ export default function CreateCollectionModal({
       setIsLoading(false);
     }
   };
+
   const handelDialogClose = () => {
     setIsOpen(false);
     setActiveTab("basic-settings");
+    form.reset();
   };
 
   return (
