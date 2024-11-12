@@ -3,10 +3,15 @@ import React, { useState } from "react";
 import { ArchiveX, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import CreateCollectionModal from "./CreateCollectionModal";
+import CollectionSuccessModal from "./CollectionSuccessModal";
 
 const CollectionsWrapper = () => {
   const [isCreateCollectionModalOpen, setIsCreateCollectionModalOpen] =
     useState(false);
+
+  const [isCollectionSuccessModalOpen, setIsCollectionSuccessModalOpen] =
+    useState(true);
+
   const collections = 0;
 
   return (
@@ -33,6 +38,10 @@ const CollectionsWrapper = () => {
       <CreateCollectionModal
         isOpen={isCreateCollectionModalOpen}
         setIsOpen={setIsCreateCollectionModalOpen}
+      />
+      <CollectionSuccessModal
+        isOpen={isCollectionSuccessModalOpen}
+        setIsOpen={setIsCollectionSuccessModalOpen}
       />
     </div>
   );

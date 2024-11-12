@@ -71,8 +71,6 @@ export default function CreateCollectionModal({
       },
     };
 
-    console.log(finalValues);
-
     try {
       const response = await fetch("api/collection", {
         method: "POST",
