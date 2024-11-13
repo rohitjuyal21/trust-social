@@ -97,9 +97,8 @@ export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
                 <Input placeholder="Collection Name" {...field} />
               </FormControl>
               <FormDescription>
-                Public URL is: localhost:3000/
+                Public URL is: {process.env.NEXT_PUBLIC_BASE_URL}/
                 {convertToKebabCase(field.value) || "your-collection"}
-                {/* change this in production */}
               </FormDescription>
               <FormMessage />
             </FormItem>

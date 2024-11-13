@@ -12,7 +12,7 @@ export interface ICollection {
     thankYouPageMessage: string;
     thankYouPageImage: string;
   };
-  publicUrl: string;
+  collectionId: string;
   createdBy: string;
   createdAt: string;
   updatedAt: string;

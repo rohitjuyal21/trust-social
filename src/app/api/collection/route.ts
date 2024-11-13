@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const collectionExist = await Collection.findOne({
-      publicUrl: body.publicUrl,
+      collectionId: body.collectionId,
     });
 
     if (collectionExist) {

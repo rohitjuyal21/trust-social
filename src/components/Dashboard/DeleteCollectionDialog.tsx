@@ -25,25 +25,27 @@ import { Input } from "../ui/input";
 import { toast } from "sonner";
 import LoadingButton from "../LoadingButton";
 
-interface DeleteDialogProps {
+interface DeleteCollectionDialogProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collectionName: string;
   id: string;
   collectionId: string;
+  onDelete: (id: string) => Promise<void>;
 }
 
 const deleteFormSchema = z.object({
   inputId: z.string().min(1, "Collection ID is required"),
 });
 
-export default function DeleteDialog({
+export default function DeleteCollectionDialog({
   isOpen,
   setIsOpen,
   collectionName,
   id,
   collectionId,
-}: DeleteDialogProps) {
+  onDelete,
+}: DeleteCollectionDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof deleteFormSchema>>({
     resolver: zodResolver(deleteFormSchema),
@@ -60,18 +62,9 @@ export default function DeleteDialog({
 
     setIsLoading(true);
     try {
-      const response = await fetch("api/collection", {
-        body: JSON.stringify({ id }),
-        method: "DELETE",
-      });
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Collection deleted successfully");
-        form.reset();
-        setIsOpen(false);
-      } else {
-        toast.error(data.message);
-      }
+      await onDelete(id);
+      form.reset();
+      setIsOpen(false);
     } catch (error) {
       toast.error("Error deleting collection");
       console.error("Error while deleting collection:", error);

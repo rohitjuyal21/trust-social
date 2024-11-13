@@ -9,7 +9,7 @@ interface IThankYouPage {
 
 export interface ICollection extends Document {
   collectionName: string;
-  publicUrl: string;
+  collectionId: string;
   collectionLogo: string;
   headerTitle: string;
   customMessage: string;
@@ -40,7 +40,7 @@ const collectionSchema = new Schema<ICollection>(
       type: String,
       required: true,
     },
-    publicUrl: {
+    collectionId: {
       type: String,
       required: true,
       unique: true,

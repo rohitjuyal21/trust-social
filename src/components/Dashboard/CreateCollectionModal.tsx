@@ -25,7 +25,8 @@ import { convertToKebabCase } from "@/lib/stringUtils";
 interface CreateCollectionModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onSuccess: (collectionName: string, publicUrl: string) => void;
+  onSuccess: (collectionName: string, collectionId: string) => void;
+  fetchCollections: () => Promise<void>;
 }
 
 const thankYouPageDefaults = {
@@ -39,6 +40,7 @@ export default function CreateCollectionModal({
   isOpen,
   setIsOpen,
   onSuccess,
+  fetchCollections,
 }: CreateCollectionModalProps) {
   const [activeTab, setActiveTab] = useState("basic-settings");
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +74,7 @@ export default function CreateCollectionModal({
           thankYouPageDefaults.thankYouPageImage,
       },
     };
-    const publicUrl = convertToKebabCase(values.collectionName);
+    const collectionId = convertToKebabCase(values.collectionName);
 
     try {
       const response = await fetch("api/collection", {
@@ -82,7 +84,7 @@ export default function CreateCollectionModal({
         },
         body: JSON.stringify({
           ...finalValues,
-          publicUrl,
+          collectionId,
         }),
       });
       const data = await response.json();
@@ -90,7 +92,8 @@ export default function CreateCollectionModal({
         toast.success("Collection created successfully");
         handelDialogClose();
         form.reset();
-        onSuccess(values.collectionName, publicUrl);
+        onSuccess(values.collectionName, collectionId);
+        fetchCollections();
       } else {
         toast.error(data.message);
         throw new Error("Failed to create collection");

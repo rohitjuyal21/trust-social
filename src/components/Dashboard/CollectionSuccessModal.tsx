@@ -22,7 +22,7 @@ interface CollectionSuccessModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collectionDetails: {
     collectionName: string;
-    publicUrl: string;
+    collectionId: string;
   };
 }
 
@@ -31,7 +31,7 @@ export default function CollectionSuccessModal({
   setIsOpen,
   collectionDetails,
 }: CollectionSuccessModalProps) {
-  const collectionUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${collectionDetails.publicUrl}`;
+  const collectionUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${collectionDetails.collectionId}`;
 
   const handleCopyLink = () => {
     console.log("Copying to clipboard:", collectionUrl);

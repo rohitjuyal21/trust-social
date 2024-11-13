@@ -7,14 +7,24 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import copy from "copy-to-clipboard";
+import { toast } from "sonner";
 
 interface CollectionMenuProps {
   setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  collectionId: string;
 }
 
 const CollectionActionsMenu = ({
   setIsDeleteDialogOpen,
+  collectionId,
 }: CollectionMenuProps) => {
+  const collectionLink = `${process.env.NEXT_PUBLIC_BASE_URL}/${collectionId}`;
+
+  const handleGetLink = () => {
+    copy(collectionLink);
+    toast.success("Link copied to clipboard");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,7 +37,7 @@ const CollectionActionsMenu = ({
           <MessageSquare className="mr-2 h-4 w-4" />
           Manage Testimonials
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleGetLink}>
           <Link className="mr-2 h-4 w-4" />
           Get the Link
         </DropdownMenuItem>
