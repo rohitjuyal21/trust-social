@@ -6,15 +6,17 @@ interface LoadingButtonProps {
   isLoading: boolean;
   children: React.ReactNode;
   className?: string;
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost";
 }
 
 export default function LoadingButton({
   isLoading,
   children,
   className,
+  variant,
 }: LoadingButtonProps) {
   return (
-    <Button disabled={isLoading} className={className}>
+    <Button disabled={isLoading} className={className} variant={variant}>
       {isLoading ? (
         <ClipLoader
           color="hsl(var(--foreground))"

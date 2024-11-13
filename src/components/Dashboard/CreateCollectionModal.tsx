@@ -25,6 +25,7 @@ import { convertToKebabCase } from "@/lib/stringUtils";
 interface CreateCollectionModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess: (collectionName: string, publicUrl: string) => void;
 }
 
 const thankYouPageDefaults = {
@@ -37,6 +38,7 @@ const thankYouPageDefaults = {
 export default function CreateCollectionModal({
   isOpen,
   setIsOpen,
+  onSuccess,
 }: CreateCollectionModalProps) {
   const [activeTab, setActiveTab] = useState("basic-settings");
   const [isLoading, setIsLoading] = useState(false);
@@ -70,6 +72,7 @@ export default function CreateCollectionModal({
           thankYouPageDefaults.thankYouPageImage,
       },
     };
+    const publicUrl = convertToKebabCase(values.collectionName);
 
     try {
       const response = await fetch("api/collection", {
@@ -79,7 +82,7 @@ export default function CreateCollectionModal({
         },
         body: JSON.stringify({
           ...finalValues,
-          publicUrl: convertToKebabCase(values.collectionName),
+          publicUrl,
         }),
       });
       const data = await response.json();
@@ -87,6 +90,7 @@ export default function CreateCollectionModal({
         toast.success("Collection created successfully");
         handelDialogClose();
         form.reset();
+        onSuccess(values.collectionName, publicUrl);
       } else {
         toast.error(data.message);
         throw new Error("Failed to create collection");
@@ -106,7 +110,7 @@ export default function CreateCollectionModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handelDialogClose}>
-      <DialogContent className="max-w-screen-lg rounded-lg ">
+      <DialogContent className="max-w-screen-lg rounded-lg">
         <VisuallyHidden.Root>
           <DialogTitle>Create Collection</DialogTitle>
         </VisuallyHidden.Root>

@@ -1,47 +1,77 @@
 "use client";
-import React, { useState } from "react";
-import { ArchiveX, Plus } from "lucide-react";
-import { Button } from "../ui/button";
+import React, { useEffect, useState } from "react";
 import CreateCollectionModal from "./CreateCollectionModal";
 import CollectionSuccessModal from "./CollectionSuccessModal";
+import { toast } from "sonner";
+import { ICollection } from "@/types/types";
+import CollectionsOverview from "./CollectionsOverview";
+import EmptyCollection from "./EmptyCollection";
+import Collections from "./Collections";
 
 const CollectionsWrapper = () => {
   const [isCreateCollectionModalOpen, setIsCreateCollectionModalOpen] =
     useState(false);
-
   const [isCollectionSuccessModalOpen, setIsCollectionSuccessModalOpen] =
-    useState(true);
+    useState(false);
 
-  const collections = 0;
+  const [collections, setCollections] = useState<ICollection[]>([]);
+
+  const [collectionDetails, setCollectionDetails] = useState({
+    collectionName: "",
+    publicUrl: "",
+  });
+
+  const handleCreateCollectionSuccess = (
+    collectionName: string,
+    publicUrl: string
+  ) => {
+    setIsCollectionSuccessModalOpen(true);
+    setCollectionDetails({
+      collectionName,
+      publicUrl,
+    });
+  };
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const response = await fetch("/api/collection");
+        const data = await response.json();
+
+        if (response.ok) {
+          setCollections(data);
+        } else {
+          toast.error(data.message);
+        }
+      } catch (error) {
+        toast.error("Error fetching collections");
+        console.error("Error while creating collection:", error);
+      }
+    };
+
+    fetchCollections();
+  }, []);
 
   return (
-    <div>
-      <h2 className="text-xl md:text-2xl font-bold mb-4">Collections</h2>
-      {collections === 0 ? (
-        <div className="flex flex-col gap-4 items-center border rounded-lg p-4 md:p-8 bg-accent/30">
-          <ArchiveX className="text-muted h-16 w-16" />
-          <div className="space-y-1">
-            <h5 className="text-muted-foreground font-bold text-center text-lg">
-              No Collections yet
-            </h5>
-            <p className="text-muted-foreground text-center">
-              Create a collection to collect testimonials
-            </p>
-          </div>
-          <Button onClick={() => setIsCreateCollectionModalOpen(true)}>
-            Create Collection <Plus className="size-4" />
-          </Button>
-        </div>
+    <div className="space-y-8">
+      <CollectionsOverview collections={collections} />
+      {collections.length === 0 ? (
+        <EmptyCollection setIsOpen={setIsCreateCollectionModalOpen} />
       ) : (
-        ""
+        <Collections
+          setIsOpen={setIsCreateCollectionModalOpen}
+          collections={collections}
+        />
       )}
       <CreateCollectionModal
         isOpen={isCreateCollectionModalOpen}
         setIsOpen={setIsCreateCollectionModalOpen}
+        onSuccess={handleCreateCollectionSuccess}
       />
       <CollectionSuccessModal
         isOpen={isCollectionSuccessModalOpen}
         setIsOpen={setIsCollectionSuccessModalOpen}
+        collectionDetails={collectionDetails}
       />
     </div>
   );
