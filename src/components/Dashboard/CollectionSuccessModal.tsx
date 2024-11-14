@@ -34,7 +34,6 @@ export default function CollectionSuccessModal({
   const collectionUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${collectionDetails.collectionId}`;
 
   const handleCopyLink = () => {
-    console.log("Copying to clipboard:", collectionUrl);
     copy(collectionUrl);
     toast.success("Link copied to clipboard");
   };
