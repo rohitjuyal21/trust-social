@@ -1,22 +1,20 @@
-export const generateUniqueId = async (collectionId: string) => {
-  let uniqueId = collectionId;
-  let isUnique = false;
+import { nanoid } from "nanoid";
 
-  while (!isUnique) {
+export const generateUniqueId = async () => {
+  let uniqueId = nanoid();
+  let collectionExists = true;
+
+  while (collectionExists) {
     try {
       const response = await fetch(`/api/collection/${uniqueId}`);
-
-      if (response.ok) {
-        // Collection with this ID already exists, generate a new one
-        uniqueId = `${collectionId}${Math.floor(Math.random() * 1000)}`;
+      if (!response.ok) {
+        collectionExists = false;
       } else {
-        // Collection with this ID doesn't exist, we can use it
-        isUnique = true;
+        uniqueId = nanoid();
       }
     } catch (error) {
       console.error("Error checking for unique ID:", error);
-      // If there's an error, assume the ID is unique and return it
-      isUnique = true;
+      collectionExists = false;
     }
   }
 

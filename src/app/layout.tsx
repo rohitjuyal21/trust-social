@@ -3,7 +3,6 @@ import { Inter, Oswald } from "next/font/google";
 
 import "./globals.css";
 import ThemeProvider from "@/components/Theme/ThemeProvider";
-import Header from "@/components/Header";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -36,7 +35,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider>
-            <Header />
             <main className="mt-[72px] w-full flex items-center justify-center">
               {children}
             </main>

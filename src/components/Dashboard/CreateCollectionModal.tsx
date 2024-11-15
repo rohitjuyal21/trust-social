@@ -21,7 +21,6 @@ import ThankYouPagePreview from "./ThankYouPagePreview";
 import ThankYouPage from "./ThankYouPage";
 import { toast } from "sonner";
 import { convertToKebabCase } from "@/lib/stringUtils";
-import { generateUniqueId } from "@/lib/generateUniqueId";
 
 interface CreateCollectionModalProps {
   isOpen: boolean;
@@ -60,7 +59,6 @@ export default function CreateCollectionModal({
   });
 
   const onSubmit = async (values: z.infer<typeof collectionSchema>) => {
-    console.log(values);
     setIsLoading(true);
     const finalValues = {
       ...values,
@@ -77,9 +75,7 @@ export default function CreateCollectionModal({
       },
     };
 
-    const baseCollectionId = convertToKebabCase(values.collectionName);
-    const collectionId = await generateUniqueId(baseCollectionId);
-    console.log(collectionId);
+    const collectionId = convertToKebabCase(values.collectionName);
     try {
       const response = await fetch("api/collection", {
         method: "POST",
