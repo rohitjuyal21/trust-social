@@ -44,7 +44,7 @@ export default function TestimonialPagePreview({
         </p>
         <div className="flex flex-col items-start justify-center gap-2 w-full my-4">
           <h4 className="text-lg font-semibold">Questions</h4>
-          <ul className="list-disc pl-5 space-y-1">
+          <ul className="list-disc pl-4 space-y-1">
             {questions.map((question, index) => (
               <li key={index} className="text-muted-foreground">
                 {question}

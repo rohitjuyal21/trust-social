@@ -28,7 +28,7 @@ const CollectionActionsMenu = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="w-8 h-8">
+        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
           <MoreVertical className="h-4 w-4 " />
         </Button>
       </DropdownMenuTrigger>

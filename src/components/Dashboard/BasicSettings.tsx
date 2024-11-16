@@ -177,9 +177,10 @@ export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
                         placeholder="Add a short question"
                       />
                       <Button
+                        type="button"
                         size="icon"
                         variant="ghost"
-                        className="flex-shrink-0"
+                        className="flex-shrink-0 rounded-full"
                         onClick={() => handleRemoveQuestion(index)}
                       >
                         <Trash2 className="w-4 h-4" />
