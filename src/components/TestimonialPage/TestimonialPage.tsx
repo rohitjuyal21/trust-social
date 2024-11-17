@@ -34,43 +34,45 @@ export default function TestimonialPage({
   }, [fetchCollection]);
 
   return (
-    <div className="p-4 max-w-xl w-full ">
+    <div>
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="flex flex-col gap-6 items-center  w-full p-6 md:p-8 border rounded-lg bg-accent/30 ">
-          <div className="h-24 w-24 rounded-full overflow-hidden">
-            <Image
-              src={collection?.collectionLogo || ""}
-              alt="Testimonial"
-              width={0}
-              height={0}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-center">
-            {collection?.headerTitle}
-          </h1>
-          <p className="text-base md:text-lg font-medium text-muted-foreground text-center">
-            {collection?.customMessage}
-          </p>
-          <div className="flex flex-col items-start justify-center gap-3 w-full my-6">
-            <h4 className="text-xl font-bold">Questions</h4>
-            <ul className="list-disc pl-4 space-y-1">
-              {collection?.questions.map((question, index) => (
-                <li
-                  key={index}
-                  className="text-muted-foreground text-base md:text-lg font-medium"
-                >
-                  {question}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <Button onClick={() => setIsWriteTestimonialModalOpen(true)}>
-              Send Testimonial <Pencil className="size-4" />
-            </Button>
+        <div className="p-4 max-w-xl w-full">
+          <div className="flex flex-col gap-6 items-center  w-full p-6 md:p-8 border rounded-lg bg-accent/30 ">
+            <div className="h-24 w-24 rounded-full overflow-hidden">
+              <Image
+                src={collection?.collectionLogo || ""}
+                alt="Testimonial"
+                width={0}
+                height={0}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold text-center">
+              {collection?.headerTitle}
+            </h1>
+            <p className="text-base md:text-lg font-medium text-muted-foreground text-center">
+              {collection?.customMessage}
+            </p>
+            <div className="flex flex-col items-start justify-center gap-3 w-full my-6">
+              <h4 className="text-xl font-bold">Questions</h4>
+              <ul className="list-disc pl-4 space-y-1">
+                {collection?.questions.map((question, index) => (
+                  <li
+                    key={index}
+                    className="text-muted-foreground text-base md:text-lg font-medium"
+                  >
+                    {question}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <Button onClick={() => setIsWriteTestimonialModalOpen(true)}>
+                Send Testimonial <Pencil className="size-4" />
+              </Button>
+            </div>
           </div>
         </div>
       )}

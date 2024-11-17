@@ -35,6 +35,7 @@ export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
     if (file) {
       const base64 = await convertToBase64(file);
       form.setValue("collectionLogo", base64 as string);
+      form.trigger("collectionLogo");
     }
   };
 
@@ -177,8 +178,8 @@ export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
                         placeholder="Add a short question"
                       />
                       <Button
-                        type="button"
                         size="icon"
+                        type="button"
                         variant="ghost"
                         className="flex-shrink-0 rounded-full"
                         onClick={() => handleRemoveQuestion(index)}
