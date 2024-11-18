@@ -24,12 +24,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { Trash2 } from "lucide-react";
+import { Trash2, X } from "lucide-react";
+import { Input } from "../ui/input";
+import ImageUpload from "../Dashboard/ImageUpload";
+import { convertToBase64 } from "@/lib/convertToBase64";
+import AttachmentsField from "./AttachmentsField";
+import LoadingButton from "../LoadingButton";
+import { toast } from "sonner";
 
 interface WriteTestimonialModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collection: ICollection | null;
+  setIsSuccessModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type Testimonial = z.infer<typeof testimonialSchema>;
@@ -38,10 +45,9 @@ export default function WriteTestimonialModal({
   isOpen,
   setIsOpen,
   collection,
+  setIsSuccessModalOpen,
 }: WriteTestimonialModalProps) {
-  const [attachments, setAttachments] = useState<File[]>([]);
-  const attachmentInputRef = useRef<HTMLInputElement>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<Testimonial>({
     resolver: zodResolver(testimonialSchema),
     defaultValues: {
@@ -55,7 +61,29 @@ export default function WriteTestimonialModal({
   });
 
   const onSubmit = async (value: Testimonial) => {
-    console.log(value);
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/testimonial", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...value,
+          collectionId: collection?._id,
+        }),
+      });
+
+      if (response.ok) {
+        handleModalClose();
+        toast.success("Testimonial submitted successfully");
+        setIsSuccessModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Error submitting testimonial:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleModalClose = () => {
@@ -63,39 +91,20 @@ export default function WriteTestimonialModal({
     form.reset();
   };
 
-  const handleChooseFile = () => {
-    if (attachmentInputRef.current) {
-      attachmentInputRef.current.click();
-    }
-  };
-  const handleFileChange = async (
+  const handleAuthorPhotoChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const filePromises = Array.from(files).map((file) =>
-        convertToBase64(file)
-      );
-      const base64Files = (await Promise.all(filePromises)) as string[];
-      form.setValue("attachments", [
-        ...(form.getValues("attachments") || []),
-        ...base64Files,
-      ]);
-      form.trigger("attachments");
+    const file = event.target.files?.[0];
+    if (file) {
+      const base64 = await convertToBase64(file);
+      form.setValue("authorPhoto", base64 as string);
+      form.trigger("authorPhoto");
     }
   };
 
-  console.log(form.watch("attachments"));
-
-  const convertToBase64 = (
-    file: File
-  ): Promise<string | ArrayBuffer | null> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  const handleRemoveAuthorPhoto = () => {
+    form.setValue("authorPhoto", "");
+    form.trigger("authorPhoto");
   };
 
   return (
@@ -113,7 +122,7 @@ export default function WriteTestimonialModal({
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
-            <div className="space-y-4 flex flex-col items-center">
+            <div className="gap-4 flex flex-col items-center">
               <p className="text-xl font-bold ">Write Testimonial to</p>
               <div className="w-20 h-20 rounded-full overflow-hidden">
                 <Image
@@ -143,7 +152,10 @@ export default function WriteTestimonialModal({
               name="rating"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>How satisfied were you?</FormLabel>
+                  <FormLabel>
+                    How satisfied were you?{" "}
+                    <span className="text-destructive">*</span>
+                  </FormLabel>
                   <FormControl>
                     <StarRating
                       rating={field.value}
@@ -159,7 +171,8 @@ export default function WriteTestimonialModal({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    What did you accomplish with our product?
+                    What did you accomplish with our product?{" "}
+                    <span className="text-destructive">*</span>
                   </FormLabel>
                   <FormControl>
                     <Textarea
@@ -173,56 +186,63 @@ export default function WriteTestimonialModal({
             />
             <FormField
               name="attachments"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>Attach Image(s) </FormLabel>
                   <FormControl>
-                    <div>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          onClick={handleChooseFile}
-                          type="button"
-                          variant="outline"
-                        >
-                          Choose File
-                        </Button>
-
-                        {attachments && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="rounded-full"
-                          >
-                            <Trash2 className="size-4" />
-                          </Button>
-                        )}
-
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={attachmentInputRef}
-                          placeholder="Collection Name"
-                          className="sr-only"
-                          onChange={handleFileChange}
-                        />
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {form.watch("attachments")?.map((attachment, index) => (
-                          <div key={index}>
-                            <Image
-                              src={attachment}
-                              alt={`attachment ${index}`}
-                              width={0}
-                              height={0}
-                              className="w-16 h-16 object-cover"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <AttachmentsField
+                      attachments={form.watch("attachments")}
+                      setAttachments={(attachments: string[]) => {
+                        form.setValue("attachments", attachments);
+                        form.trigger("attachments");
+                      }}
+                    />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="authorName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Your Name <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="John Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="authorEmail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Your Email <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="example@gmail.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="authorPhoto"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upload your photo </FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      image={field.value}
+                      onChange={handleAuthorPhotoChange}
+                      onClear={handleRemoveAuthorPhoto}
+                    />
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -236,7 +256,9 @@ export default function WriteTestimonialModal({
               >
                 Cancel
               </Button>
-              <Button className="flex-1">Send</Button>
+              <LoadingButton isLoading={isLoading} className="flex-1">
+                Send
+              </LoadingButton>
             </DialogFooter>
           </form>
         </Form>

@@ -6,6 +6,7 @@ import Loader from "../Loader";
 import { Button } from "../ui/button";
 import { Pencil } from "lucide-react";
 import WriteTestimonialModal from "./WriteTestimonialModal";
+import TestimonialSuccessModal from "./TestimonialSuccessModal";
 
 export default function TestimonialPage({
   collectionId,
@@ -16,6 +17,7 @@ export default function TestimonialPage({
   const [isLoading, setIsLoading] = useState(true);
   const [isWriteTestimonialModalOpen, setIsWriteTestimonialModalOpen] =
     useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const fetchCollection = useCallback(async () => {
     try {
@@ -80,6 +82,11 @@ export default function TestimonialPage({
         isOpen={isWriteTestimonialModalOpen}
         setIsOpen={setIsWriteTestimonialModalOpen}
         collection={collection}
+        setIsSuccessModalOpen={setIsSuccessModalOpen}
+      />
+      <TestimonialSuccessModal
+        isOpen={isSuccessModalOpen}
+        setIsOpen={setIsSuccessModalOpen}
       />
     </div>
   );
