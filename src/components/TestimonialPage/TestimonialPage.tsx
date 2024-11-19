@@ -70,11 +70,13 @@ export default function TestimonialPage({
                 ))}
               </ul>
             </div>
-            <div>
-              <Button onClick={() => setIsWriteTestimonialModalOpen(true)}>
-                Send Testimonial <Pencil className="size-4" />
-              </Button>
-            </div>
+            <Button
+              className="w-full"
+              style={{ background: collection?.customButtonColor }}
+              onClick={() => setIsWriteTestimonialModalOpen(true)}
+            >
+              Send Testimonial <Pencil className="size-4" />
+            </Button>
           </div>
         </div>
       )}

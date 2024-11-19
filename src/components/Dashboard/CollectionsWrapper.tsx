@@ -20,6 +20,7 @@ const CollectionsWrapper = () => {
     collectionId: "",
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleCreateCollectionSuccess = (
     collectionName: string,
@@ -69,9 +70,27 @@ const CollectionsWrapper = () => {
     }
   };
 
+  const fetchCollectionById = async (collectionId: string) => {
+    try {
+      const response = await fetch(`/api/collection/${collectionId}`);
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching collection:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchCollections();
   }, []);
+
+  const handleEditClick = (collectionId: string) => {
+    setIsEditing(true);
+    setIsCreateCollectionModalOpen(true);
+    fetchCollectionById(collectionId);
+  };
 
   return (
     <>
@@ -89,6 +108,7 @@ const CollectionsWrapper = () => {
               setIsOpen={setIsCreateCollectionModalOpen}
               collections={collections}
               deleteCollection={deleteCollection}
+              onEditClick={handleEditClick}
             />
           )}
           <CreateCollectionModal
@@ -96,6 +116,8 @@ const CollectionsWrapper = () => {
             setIsOpen={setIsCreateCollectionModalOpen}
             onSuccess={handleCreateCollectionSuccess}
             fetchCollections={fetchCollections}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
           />
           <CollectionSuccessModal
             isOpen={isCollectionSuccessModalOpen}

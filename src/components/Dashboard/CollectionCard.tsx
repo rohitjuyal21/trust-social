@@ -8,11 +8,13 @@ import DeleteCollectionDialog from "./DeleteCollectionDialog";
 interface CollectionCardProps {
   collection: ICollection;
   deleteCollection: (id: string) => Promise<void>;
+  onEditClick: (collectionId: string) => void;
 }
 
 export default function CollectionCard({
   collection,
   deleteCollection,
+  onEditClick,
 }: CollectionCardProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   return (
@@ -33,6 +35,8 @@ export default function CollectionCard({
         <CollectionMenu
           setIsDeleteDialogOpen={setIsDeleteDialogOpen}
           collectionId={collection.collectionId}
+          onEditClick={onEditClick}
+          id={collection._id}
         />
       </div>
       <div>

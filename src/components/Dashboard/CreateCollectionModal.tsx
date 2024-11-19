@@ -21,12 +21,15 @@ import ThankYouPagePreview from "./ThankYouPagePreview";
 import ThankYouPage from "./ThankYouPage";
 import { toast } from "sonner";
 import { convertToKebabCase } from "@/lib/stringUtils";
+import { set } from "mongoose";
 
 interface CreateCollectionModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSuccess: (collectionName: string, collectionId: string) => void;
   fetchCollections: () => Promise<void>;
+  isEditing: boolean;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const thankYouPageDefaults = {
@@ -41,6 +44,8 @@ export default function CreateCollectionModal({
   setIsOpen,
   onSuccess,
   fetchCollections,
+  isEditing,
+  setIsEditing,
 }: CreateCollectionModalProps) {
   const [activeTab, setActiveTab] = useState("basic-settings");
   const [isLoading, setIsLoading] = useState(false);
@@ -107,6 +112,7 @@ export default function CreateCollectionModal({
 
   const handelDialogClose = () => {
     setIsOpen(false);
+    setIsEditing(false);
     setActiveTab("basic-settings");
     form.reset();
   };
@@ -151,7 +157,11 @@ export default function CreateCollectionModal({
                 <TabsTrigger value="thank-you">Thank you page</TabsTrigger>
               </TabsList>
               <TabsContent value="basic-settings">
-                <BasicSettings form={form} isLoading={isLoading} />
+                <BasicSettings
+                  form={form}
+                  isLoading={isLoading}
+                  isEditing={isEditing}
+                />
               </TabsContent>
               <TabsContent value="thank-you">
                 <ThankYouPage form={form} />

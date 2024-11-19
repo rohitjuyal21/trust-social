@@ -7,12 +7,14 @@ interface CollectionsProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collections: ICollection[];
   deleteCollection: (id: string) => Promise<void>;
+  onEditClick: (collectionId: string) => void;
 }
 
 export default function Collections({
   setIsOpen,
   collections,
   deleteCollection,
+  onEditClick,
 }: CollectionsProps) {
   return (
     <div className="space-y-6">
@@ -26,6 +28,7 @@ export default function Collections({
             key={collection._id}
             collection={collection}
             deleteCollection={deleteCollection}
+            onEditClick={onEditClick}
           />
         ))}
       </div>

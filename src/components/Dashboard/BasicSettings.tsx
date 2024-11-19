@@ -25,9 +25,14 @@ import { convertToKebabCase } from "@/lib/stringUtils";
 interface BasicSettingsProps {
   form: UseFormReturn<z.infer<typeof collectionSchema>>;
   isLoading: boolean;
+  isEditing: boolean;
 }
 
-export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
+export default function BasicSettings({
+  form,
+  isLoading,
+  isEditing,
+}: BasicSettingsProps) {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -77,12 +82,18 @@ export default function BasicSettings({ form, isLoading }: BasicSettingsProps) {
   return (
     <div className="mt-6 space-y-6">
       <div className="space-y-1">
-        <h4 className="text-2xl font-bold text-center">
-          Create a new Collection
-        </h4>
-        <p className="text-muted-foreground text-center">
-          Completing the collection sets up a testimonial page.
-        </p>
+        {!isEditing ? (
+          <>
+            <h4 className="text-2xl font-bold text-center">
+              Create a new Collection
+            </h4>
+            <p className="text-muted-foreground text-center">
+              Completing the collection sets up a testimonial page.
+            </p>
+          </>
+        ) : (
+          <h4 className="text-2xl font-bold text-center">Edit Collection</h4>
+        )}
       </div>
 
       <div className="flex flex-col gap-6">

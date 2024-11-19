@@ -24,10 +24,10 @@ export default function SuccessModal({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent hidden className="max-w-sm rounded-lg">
         <VisuallyHidden.Root>
-          <DialogTitle>Collection added successfully!</DialogTitle>
+          <DialogTitle>Success Modal</DialogTitle>
         </VisuallyHidden.Root>
         <VisuallyHidden.Root>
-          <DialogDescription>Description goes here</DialogDescription>
+          <DialogDescription>Description</DialogDescription>
         </VisuallyHidden.Root>
 
         <div className="space-y-2 p-4">

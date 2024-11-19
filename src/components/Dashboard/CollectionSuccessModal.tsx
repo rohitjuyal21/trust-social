@@ -1,13 +1,4 @@
 import React from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "../ui/dialog";
-
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import Image from "next/image";
 import copy from "copy-to-clipboard";
 import { toast } from "sonner";
 import {
@@ -16,6 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import SuccessModal from "../SuccessModal";
 
 interface CollectionSuccessModalProps {
   isOpen: boolean;
@@ -39,52 +31,32 @@ export default function CollectionSuccessModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent hidden className="max-w-sm rounded-lg">
-        <VisuallyHidden.Root>
-          <DialogTitle>Collection added successfully!</DialogTitle>
-        </VisuallyHidden.Root>
-        <VisuallyHidden.Root>
-          <DialogDescription>Description goes here</DialogDescription>
-        </VisuallyHidden.Root>
+    <SuccessModal isOpen={isOpen} setIsOpen={setIsOpen}>
+      <h2 className="text-xl font-semibold text-center">
+        Added {collectionDetails.collectionName} successfully!
+      </h2>
 
-        <div className="space-y-2 p-4">
-          <div className="rounded-md overflow-hidden">
-            <Image
-              src={"/assets/excited-dwight.webp"}
-              alt="collection-success"
-              width={0}
-              height={0}
-              className="w-full max-h-56 object-cover object-top"
-            />
-          </div>
-          <h2 className="text-xl font-semibold text-center">
-            Added {collectionDetails.collectionName} successfully!
-          </h2>
-
-          <div>
-            <p className="text-sm text-muted-foreground text-center">
-              Here is the link for your customers:
-            </p>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <p
-                    title=""
-                    className="text-sm text-primary text-center cursor-pointer"
-                    onClick={handleCopyLink}
-                  >
-                    {collectionUrl}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Copy Link</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+      <div>
+        <p className="text-sm text-muted-foreground text-center">
+          Here is the link for your customers:
+        </p>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <p
+                title=""
+                className="text-sm text-primary text-center cursor-pointer"
+                onClick={handleCopyLink}
+              >
+                {collectionUrl}
+              </p>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>Copy Link</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    </SuccessModal>
   );
 }

@@ -13,11 +13,15 @@ import { toast } from "sonner";
 interface CollectionMenuProps {
   setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collectionId: string;
+  onEditClick: (collectionId: string) => void;
+  id: string;
 }
 
 const CollectionActionsMenu = ({
   setIsDeleteDialogOpen,
   collectionId,
+  onEditClick,
+  id,
 }: CollectionMenuProps) => {
   const collectionLink = `${process.env.NEXT_PUBLIC_BASE_URL}/${collectionId}`;
 
@@ -25,6 +29,7 @@ const CollectionActionsMenu = ({
     copy(collectionLink);
     toast.success("Link copied to clipboard");
   };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,21 +38,24 @@ const CollectionActionsMenu = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
           <MessageSquare className="mr-2 h-4 w-4" />
           Manage Testimonials
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleGetLink}>
+        <DropdownMenuItem onClick={handleGetLink} className="cursor-pointer">
           <Link className="mr-2 h-4 w-4" />
           Get the Link
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => onEditClick(id)}
+          className="cursor-pointer"
+        >
           <Edit className="mr-2 h-4 w-4" />
           Edit Collection
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setIsDeleteDialogOpen(true)}
-          className="text-destructive focus:text-destructive"
+          className="text-destructive focus:text-destructive cursor-pointer"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete Collection
