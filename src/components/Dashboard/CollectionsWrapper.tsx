@@ -21,6 +21,8 @@ const CollectionsWrapper = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [defaultFormValues, setDefaultFormValues] =
+    useState<ICollection | null>(null);
 
   const handleCreateCollectionSuccess = (
     collectionName: string,
@@ -74,7 +76,9 @@ const CollectionsWrapper = () => {
     try {
       const response = await fetch(`/api/collection/${collectionId}`);
       const data = await response.json();
-      console.log(data);
+      if (response.ok) {
+        setDefaultFormValues(data);
+      }
     } catch (error) {
       console.error("Error fetching collection:", error);
     } finally {
@@ -91,6 +95,8 @@ const CollectionsWrapper = () => {
     setIsCreateCollectionModalOpen(true);
     fetchCollectionById(collectionId);
   };
+
+  console.log(defaultFormValues);
 
   return (
     <>
@@ -118,6 +124,8 @@ const CollectionsWrapper = () => {
             fetchCollections={fetchCollections}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
+            defaultValues={defaultFormValues}
+            setDefaultValues={setDefaultFormValues}
           />
           <CollectionSuccessModal
             isOpen={isCollectionSuccessModalOpen}

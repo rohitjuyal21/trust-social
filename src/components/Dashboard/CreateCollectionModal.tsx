@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,7 @@ import ThankYouPagePreview from "./ThankYouPagePreview";
 import ThankYouPage from "./ThankYouPage";
 import { toast } from "sonner";
 import { convertToKebabCase } from "@/lib/stringUtils";
-import { set } from "mongoose";
+import { ICollection } from "@/types/types";
 
 interface CreateCollectionModalProps {
   isOpen: boolean;
@@ -30,6 +30,8 @@ interface CreateCollectionModalProps {
   fetchCollections: () => Promise<void>;
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  defaultValues?: ICollection | null;
+  setDefaultValues: React.Dispatch<React.SetStateAction<ICollection | null>>;
 }
 
 const thankYouPageDefaults = {
@@ -46,9 +48,12 @@ export default function CreateCollectionModal({
   fetchCollections,
   isEditing,
   setIsEditing,
+  defaultValues,
+  setDefaultValues,
 }: CreateCollectionModalProps) {
   const [activeTab, setActiveTab] = useState("basic-settings");
   const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof collectionSchema>>({
     resolver: zodResolver(collectionSchema),
     defaultValues: {
@@ -62,6 +67,23 @@ export default function CreateCollectionModal({
       thankYouPage: thankYouPageDefaults,
     },
   });
+
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset({ ...defaultValues });
+    } else {
+      form.reset({
+        collectionName: "",
+        collectionLogo: "",
+        headerTitle: "",
+        customMessage: "",
+        questions: collectionQuestions,
+        collectStarRatings: false,
+        customButtonColor: "",
+        thankYouPage: thankYouPageDefaults,
+      });
+    }
+  }, [defaultValues, form]);
 
   const onSubmit = async (values: z.infer<typeof collectionSchema>) => {
     setIsLoading(true);
@@ -81,32 +103,62 @@ export default function CreateCollectionModal({
     };
 
     const collectionId = convertToKebabCase(values.collectionName);
-    try {
-      const response = await fetch("api/collection", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...finalValues,
-          collectionId,
-        }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Collection created successfully");
-        handelDialogClose();
-        form.reset();
-        onSuccess(values.collectionName, collectionId);
-        fetchCollections();
-      } else {
-        toast.error(data.message);
-        throw new Error("Failed to create collection");
+    if (isEditing) {
+      try {
+        const response = await fetch(`api/collection/${defaultValues?._id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...finalValues,
+            collectionId,
+          }),
+        });
+        const data = await response.json();
+        console.log(data);
+
+        if (response.ok) {
+          toast.success("Collection updated successfully");
+          handelDialogClose();
+          onSuccess(values.collectionName, collectionId);
+          fetchCollections();
+        } else {
+          toast.error(data.message);
+          throw new Error("Failed to update collection");
+        }
+      } catch (error) {
+        console.error("Error while creating collection:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error while creating collection:", error);
-    } finally {
-      setIsLoading(false);
+    } else {
+      try {
+        const response = await fetch("api/collection", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...finalValues,
+            collectionId,
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          toast.success("Collection created successfully");
+          handelDialogClose();
+          onSuccess(values.collectionName, collectionId);
+          fetchCollections();
+        } else {
+          toast.error(data.message);
+          throw new Error("Failed to create collection");
+        }
+      } catch (error) {
+        console.error("Error while creating collection:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -114,6 +166,7 @@ export default function CreateCollectionModal({
     setIsOpen(false);
     setIsEditing(false);
     setActiveTab("basic-settings");
+    setDefaultValues(null);
     form.reset();
   };
 

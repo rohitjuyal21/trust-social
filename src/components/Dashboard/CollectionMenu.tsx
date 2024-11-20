@@ -14,14 +14,12 @@ interface CollectionMenuProps {
   setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collectionId: string;
   onEditClick: (collectionId: string) => void;
-  id: string;
 }
 
 const CollectionActionsMenu = ({
   setIsDeleteDialogOpen,
   collectionId,
   onEditClick,
-  id,
 }: CollectionMenuProps) => {
   const collectionLink = `${process.env.NEXT_PUBLIC_BASE_URL}/${collectionId}`;
 
@@ -39,25 +37,25 @@ const CollectionActionsMenu = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem className="cursor-pointer">
-          <MessageSquare className="mr-2 h-4 w-4" />
+          <MessageSquare className="h-4 w-4" />
           Manage Testimonials
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleGetLink} className="cursor-pointer">
-          <Link className="mr-2 h-4 w-4" />
+          <Link className="h-4 w-4" />
           Get the Link
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => onEditClick(id)}
+          onClick={() => onEditClick(collectionId)}
           className="cursor-pointer"
         >
-          <Edit className="mr-2 h-4 w-4" />
+          <Edit className="h-4 w-4" />
           Edit Collection
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setIsDeleteDialogOpen(true)}
           className="text-destructive focus:text-destructive cursor-pointer"
         >
-          <Trash2 className="mr-2 h-4 w-4" />
+          <Trash2 className="h-4 w-4" />
           Delete Collection
         </DropdownMenuItem>
       </DropdownMenuContent>

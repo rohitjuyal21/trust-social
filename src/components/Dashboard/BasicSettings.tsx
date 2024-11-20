@@ -11,7 +11,7 @@ import {
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Plus, PlusCircle, Trash2 } from "lucide-react";
+import { Edit, Plus, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
@@ -270,7 +270,15 @@ export default function BasicSettings({
           )}
         />
         <LoadingButton isLoading={isLoading}>
-          Create new Collection <Plus className="size-4" />
+          {isEditing ? (
+            <>
+              Update Collection <Edit className="size-4" />
+            </>
+          ) : (
+            <>
+              Create new Collection <Plus className="size-4" />
+            </>
+          )}
         </LoadingButton>
       </div>
     </div>

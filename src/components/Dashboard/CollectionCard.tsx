@@ -36,7 +36,6 @@ export default function CollectionCard({
           setIsDeleteDialogOpen={setIsDeleteDialogOpen}
           collectionId={collection.collectionId}
           onEditClick={onEditClick}
-          id={collection._id}
         />
       </div>
       <div>
