@@ -16,5 +16,20 @@ export interface ICollection {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  testimonials: Testimonial[];
+  _V: number;
+}
+
+export interface Testimonial {
+  _id: string;
+  collectionId: string;
+  testimonial: string;
+  rating: number;
+  attachments: string[];
+  authorName: string;
+  authorEmail: string;
+  authorPhoto: string;
+  createdAt: string;
+  updatedAt: string;
   _V: number;
 }

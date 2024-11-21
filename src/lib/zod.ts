@@ -27,7 +27,10 @@ export const collectionSchema = object({
   collectionLogo: string().min(1, "Collection logo is required"),
   headerTitle: string().min(1, "Header title is required"),
   customMessage: string().min(1, "Custom message is required"),
-  questions: array(string()).min(1, "At least one question is required"),
+  questions: array(string().min(1, "Question cannot be empty")).min(
+    1,
+    "At least one question is required"
+  ),
   collectStarRatings: boolean(),
   customButtonColor: string().optional(),
   thankYouPage: object({

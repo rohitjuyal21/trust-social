@@ -20,6 +20,7 @@ export interface ICollection extends Document {
   createdAt?: Date;
   updatedAt?: Date;
   createdBy: Schema.Types.ObjectId;
+  testimonials: Schema.Types.ObjectId[];
 }
 
 const thankYouPageSchema = new Schema<IThankYouPage>({
@@ -76,6 +77,12 @@ const collectionSchema = new Schema<ICollection>(
       ref: "User",
       required: true,
     },
+    testimonials: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Testimonial",
+      },
+    ],
   },
   { timestamps: true }
 );

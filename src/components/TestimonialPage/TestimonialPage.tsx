@@ -89,6 +89,7 @@ export default function TestimonialPage({
       <TestimonialSuccessModal
         isOpen={isSuccessModalOpen}
         setIsOpen={setIsSuccessModalOpen}
+        thankYouPage={collection?.thankYouPage}
       />
     </div>
   );

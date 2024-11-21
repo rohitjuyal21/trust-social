@@ -39,7 +39,6 @@ const CollectionsWrapper = () => {
     try {
       const response = await fetch("/api/collection");
       const data = await response.json();
-
       if (response.ok) {
         setCollections(data);
       } else {
@@ -88,6 +87,7 @@ const CollectionsWrapper = () => {
 
   useEffect(() => {
     fetchCollections();
+    fetchTestimonials();
   }, []);
 
   const handleEditClick = (collectionId: string) => {
@@ -96,7 +96,15 @@ const CollectionsWrapper = () => {
     fetchCollectionById(collectionId);
   };
 
-  console.log(defaultFormValues);
+  const fetchTestimonials = async () => {
+    try {
+      const response = await fetch("api/testimonial");
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log("Error fetching all Testimonials", error);
+    }
+  };
 
   return (
     <>

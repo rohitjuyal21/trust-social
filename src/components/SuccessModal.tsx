@@ -12,12 +12,14 @@ import Image from "next/image";
 interface CollectionSuccessModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  image?: string;
   children: React.ReactNode;
 }
 
 export default function SuccessModal({
   isOpen,
   setIsOpen,
+  image,
   children,
 }: CollectionSuccessModalProps) {
   return (
@@ -33,7 +35,7 @@ export default function SuccessModal({
         <div className="space-y-2 p-4">
           <div className="rounded-md overflow-hidden">
             <Image
-              src={"/assets/excited-dwight.webp"}
+              src={image || "/assets/excited-dwight.webp"}
               alt="collection-success"
               width={0}
               height={0}

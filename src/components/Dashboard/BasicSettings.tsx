@@ -62,6 +62,7 @@ export default function BasicSettings({
   const handleAddQuestion = () => {
     const newQuestion = "";
     form.setValue("questions", [...form.getValues("questions"), newQuestion]);
+    form.trigger("questions");
   };
 
   const handleQuestionChange = (id: number, value: string) => {
@@ -70,6 +71,7 @@ export default function BasicSettings({
       .map((question, index) => (id === index ? value : question));
 
     form.setValue("questions", updatedQuestions);
+    form.trigger("questions");
   };
 
   const handleRemoveQuestion = (id: number) => {
@@ -77,6 +79,7 @@ export default function BasicSettings({
       .getValues("questions")
       .filter((_, index) => id !== index);
     form.setValue("questions", updatedQuestions);
+    form.trigger("questions");
   };
 
   return (
@@ -180,23 +183,30 @@ export default function BasicSettings({
               <FormControl>
                 <div className="space-y-2">
                   {field.value.map((question, index) => (
-                    <div key={index} className="flex gap-2 items-center">
-                      <Input
-                        value={question}
-                        onChange={(e) =>
-                          handleQuestionChange(index, e.target.value)
-                        }
-                        placeholder="Add a short question"
-                      />
-                      <Button
-                        size="icon"
-                        type="button"
-                        variant="ghost"
-                        className="flex-shrink-0 rounded-full"
-                        onClick={() => handleRemoveQuestion(index)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                    <div key={index} className="space-y-2">
+                      <div className="flex gap-2 items-center">
+                        <Input
+                          value={question}
+                          onChange={(e) =>
+                            handleQuestionChange(index, e.target.value)
+                          }
+                          placeholder="Add a short question"
+                        />
+                        <Button
+                          size="icon"
+                          type="button"
+                          variant="ghost"
+                          className="flex-shrink-0 rounded-full"
+                          onClick={() => handleRemoveQuestion(index)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      {form.formState.errors.questions?.[index]?.message && (
+                        <p className="text-destructive text-sm">
+                          {form.formState.errors.questions[index].message}
+                        </p>
+                      )}
                     </div>
                   ))}
                   {form.watch("questions").length < 5 && (
@@ -211,7 +221,9 @@ export default function BasicSettings({
                   )}
                 </div>
               </FormControl>
-              <FormMessage />
+              {form.formState.errors.questions?.ref?.name === "questions" && (
+                <FormMessage />
+              )}
             </FormItem>
           )}
         />
