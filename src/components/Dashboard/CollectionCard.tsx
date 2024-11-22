@@ -4,6 +4,7 @@ import { Card } from "../ui/card";
 import Image from "next/image";
 import CollectionMenu from "./CollectionMenu";
 import DeleteCollectionDialog from "./DeleteCollectionDialog";
+import Link from "next/link";
 
 interface CollectionCardProps {
   collection: ICollection;
@@ -20,7 +21,10 @@ export default function CollectionCard({
   return (
     <Card className="p-4 space-y-4">
       <div className="flex justify-between gap-2">
-        <div className="flex gap-4 items-center">
+        <Link
+          href={`/testimonials/${collection.collectionId}`}
+          className="flex gap-4 items-center"
+        >
           <div className="rounded-lg overflow-hidden border">
             <Image
               src={collection.collectionLogo}
@@ -31,7 +35,7 @@ export default function CollectionCard({
             />
           </div>
           <h4 className="font-medium">{collection.collectionName}</h4>
-        </div>
+        </Link>
         <CollectionMenu
           setIsDeleteDialogOpen={setIsDeleteDialogOpen}
           collectionId={collection.collectionId}

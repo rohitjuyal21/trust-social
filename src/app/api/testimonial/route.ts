@@ -17,7 +17,13 @@ export async function POST(req: Request) {
       ...body,
     });
 
-    await testimonial.save();
+    const newTestimonial = await testimonial.save();
+
+    const collection = await Collection.findById(body.collectionId);
+
+    collection.testimonials.push(newTestimonial._id);
+
+    await collection.save();
 
     return Response.json(testimonial, { status: 201 });
   } catch (error) {
@@ -40,17 +46,12 @@ export async function GET(req: Request) {
     const collections = await Collection.find({
       createdBy: session.user.id,
     })
-      .populate({
-        path: "testimonials",
-        model: "Testimonial",
-      })
+      .populate("testimonials")
       .exec();
 
     const testimonials = collections.flatMap(
       (collection) => collection.testimonials
     );
-
-    console.log(collections.length);
 
     return Response.json(testimonials, { status: 201 });
   } catch (error) {

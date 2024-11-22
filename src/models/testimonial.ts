@@ -35,6 +35,9 @@ const testimonialSchema = new Schema<ITestimonial>(
       type: String,
       required: true,
     },
+    authorPhoto: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

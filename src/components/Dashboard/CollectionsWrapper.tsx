@@ -24,6 +24,8 @@ const CollectionsWrapper = () => {
   const [defaultFormValues, setDefaultFormValues] =
     useState<ICollection | null>(null);
 
+  const [totalTestimonials, setTotalTestimonials] = useState(0);
+
   const handleCreateCollectionSuccess = (
     collectionName: string,
     collectionId: string
@@ -47,8 +49,6 @@ const CollectionsWrapper = () => {
     } catch (error) {
       toast.error("Error fetching collections");
       console.error("Error while creating collection:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -80,14 +80,20 @@ const CollectionsWrapper = () => {
       }
     } catch (error) {
       console.error("Error fetching collection:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCollections();
-    fetchTestimonials();
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        await Promise.all([fetchCollections(), fetchTestimonials()]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleEditClick = (collectionId: string) => {
@@ -100,7 +106,9 @@ const CollectionsWrapper = () => {
     try {
       const response = await fetch("api/testimonial");
       const data = await response.json();
-      console.log(data);
+      if (response.ok) {
+        setTotalTestimonials(data.length);
+      }
     } catch (error) {
       console.log("Error fetching all Testimonials", error);
     }
@@ -114,7 +122,10 @@ const CollectionsWrapper = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <CollectionsOverview collections={collections} />
+          <CollectionsOverview
+            collections={collections.length}
+            testimonials={totalTestimonials}
+          />
           {collections.length === 0 ? (
             <EmptyCollection setIsOpen={setIsCreateCollectionModalOpen} />
           ) : (

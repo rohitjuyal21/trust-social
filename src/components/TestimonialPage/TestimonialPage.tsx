@@ -36,11 +36,11 @@ export default function TestimonialPage({
   }, [fetchCollection]);
 
   return (
-    <div>
+    <div className="w-full">
       {isLoading ? (
         <Loader />
       ) : (
-        <div className="p-4 max-w-xl w-full">
+        <div className="p-4 max-w-xl mx-auto w-full">
           <div className="flex flex-col gap-6 items-center  w-full p-6 md:p-8 border rounded-lg bg-accent/30 ">
             <div className="h-24 w-24 rounded-full overflow-hidden">
               <Image
