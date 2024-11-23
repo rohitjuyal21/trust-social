@@ -18,7 +18,7 @@ export default function Header() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 80, duration: 0.4 }}
-      className="p-4 border-b fixed left-0 w-full bg-background top-0 h-[72px]"
+      className="p-4 md:px-6 md:py-4 border-b fixed left-0 w-full bg-background top-0 h-[72px]"
     >
       <div className="flex items-center justify-between">
         <Link

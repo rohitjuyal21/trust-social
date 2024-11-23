@@ -1,5 +1,5 @@
 import { ICollection } from "@/types/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import Image from "next/image";
 import CollectionMenu from "./CollectionMenu";
@@ -18,6 +18,24 @@ export default function CollectionCard({
   onEditClick,
 }: CollectionCardProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [testimonials, setTestimonials] = useState(0);
+
+  const fetchTestimonial = async () => {
+    try {
+      const response = await fetch(
+        `/api/testimonial/${collection.collectionId}`
+      );
+      const data = await response.json();
+      setTestimonials(data.length);
+    } catch (error) {
+      console.log(`Error fetching testimonials: ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestimonial();
+  }, []);
+
   return (
     <Card className="p-4 space-y-4">
       <div className="flex justify-between gap-2">
@@ -43,7 +61,9 @@ export default function CollectionCard({
         />
       </div>
       <div>
-        <p className="text-muted-foreground text-sm">Testimonials: {10}</p>
+        <p className="text-muted-foreground text-sm">
+          Testimonials: {testimonials}
+        </p>
       </div>
       <DeleteCollectionDialog
         isOpen={isDeleteDialogOpen}

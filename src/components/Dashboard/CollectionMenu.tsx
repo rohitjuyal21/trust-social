@@ -1,5 +1,11 @@
 import React from "react";
-import { MoreVertical, Edit, Link, Trash2, MessageSquare } from "lucide-react";
+import {
+  MoreVertical,
+  Edit,
+  Trash2,
+  MessageSquare,
+  LinkIcon,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +15,7 @@ import {
 import { Button } from "../ui/button";
 import copy from "copy-to-clipboard";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface CollectionMenuProps {
   setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,12 +43,14 @@ const CollectionActionsMenu = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem className="cursor-pointer">
-          <MessageSquare className="h-4 w-4" />
-          Manage Testimonials
-        </DropdownMenuItem>
+        <Link href={`/testimonials/${collectionId}`}>
+          <DropdownMenuItem className="cursor-pointer">
+            <MessageSquare className="h-4 w-4" />
+            Manage Testimonials
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem onClick={handleGetLink} className="cursor-pointer">
-          <Link className="h-4 w-4" />
+          <LinkIcon className="h-4 w-4" />
           Get the Link
         </DropdownMenuItem>
         <DropdownMenuItem
