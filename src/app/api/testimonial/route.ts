@@ -7,11 +7,6 @@ export async function POST(req: Request) {
   try {
     await dbConnect();
 
-    const session = await auth();
-    if (!session || !session.user) {
-      return Response.json({ message: "User doesn't exist" }, { status: 401 });
-    }
-
     const body = await req.json();
     const testimonial = await Testimonial.create({
       ...body,

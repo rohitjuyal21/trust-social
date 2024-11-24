@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
 import { Pencil } from "lucide-react";
-import WriteTestimonialModal from "./WriteTestimonialModal";
+import WriteTestimonialModal from "../WriteTestimonialModal";
 import TestimonialSuccessModal from "./TestimonialSuccessModal";
 
 export default function TestimonialPage({
@@ -38,7 +38,9 @@ export default function TestimonialPage({
   return (
     <div className="w-full">
       {isLoading ? (
-        <Loader />
+        <div className="flex items-center justify-center">
+          <Loader />
+        </div>
       ) : (
         <div className="p-4 max-w-xl mx-auto w-full">
           <div className="flex flex-col gap-6 items-center  w-full p-6 md:p-8 border rounded-lg bg-accent/30 ">

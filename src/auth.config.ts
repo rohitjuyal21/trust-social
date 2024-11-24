@@ -6,8 +6,8 @@ import { User } from "./models/user";
 import dbConnect from "./lib/dbConnect";
 import bcryptjs from "bcryptjs";
 
-const publicRoutes = ["/", "/sign-in", "/sign-up"];
 const authRoutes = ["/sign-in", "/sign-up"];
+const privateRoutes = ["/dashboard", "/testimonials/", "/settings"];
 
 export default {
   providers: [
@@ -73,18 +73,22 @@ export default {
       const isLoggedIn = !!auth?.user;
       const { pathname } = nextUrl;
 
-      if (publicRoutes.includes(pathname)) {
-        if (authRoutes.includes(pathname) && isLoggedIn) {
-          return Response.redirect(new URL("/dashboard", nextUrl));
-        }
-        return true;
+      const isAuthRoute = authRoutes.includes(pathname);
+      const isPrivateRoute =
+        privateRoutes.some((route) => pathname.startsWith(route)) ||
+        pathname.startsWith("/testimonials");
+
+      // Redirect logged-in users trying to access auth pages
+      if (isAuthRoute && isLoggedIn) {
+        return Response.redirect(new URL("/dashboard", nextUrl));
       }
 
-      if (!isLoggedIn) {
+      // Redirect non-logged-in users trying to access private pages
+      if (isPrivateRoute && !isLoggedIn) {
         return Response.redirect(new URL("/sign-in", nextUrl));
       }
 
-      return isLoggedIn;
+      return true;
     },
 
     jwt({ token, user, trigger, session }) {

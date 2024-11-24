@@ -1,6 +1,6 @@
 import { convertToBase64 } from "@/lib/convertToBase64";
 import React, { useRef } from "react";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import { Trash2, X } from "lucide-react";
 import Image from "next/image";
 

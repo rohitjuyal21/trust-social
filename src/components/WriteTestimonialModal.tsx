@@ -5,11 +5,11 @@ import {
   DialogDescription,
   DialogFooter,
   DialogTitle,
-} from "../ui/dialog";
+} from "./ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { ICollection } from "@/types/types";
 import Image from "next/image";
-import StarRating from "./StarRating";
+import StarRating from "./TestimonialPage/StarRating";
 import { z } from "zod";
 import { testimonialSchema } from "@/lib/zod";
 import {
@@ -19,24 +19,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "./ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import { Trash2, X } from "lucide-react";
-import { Input } from "../ui/input";
-import ImageUpload from "../Dashboard/ImageUpload";
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
+import ImageUpload from "./Dashboard/ImageUpload";
 import { convertToBase64 } from "@/lib/convertToBase64";
 import AttachmentsField from "./AttachmentsField";
-import LoadingButton from "../LoadingButton";
+import LoadingButton from "./LoadingButton";
 import { toast } from "sonner";
 
 interface WriteTestimonialModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   collection: ICollection | null;
-  setIsSuccessModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSuccessModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  refetchData?: () => void;
 }
 
 type Testimonial = z.infer<typeof testimonialSchema>;
@@ -46,6 +46,7 @@ export default function WriteTestimonialModal({
   setIsOpen,
   collection,
   setIsSuccessModalOpen,
+  refetchData,
 }: WriteTestimonialModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<Testimonial>({
@@ -77,7 +78,8 @@ export default function WriteTestimonialModal({
       if (response.ok) {
         handleModalClose();
         toast.success("Testimonial submitted successfully");
-        setIsSuccessModalOpen(true);
+        setIsSuccessModalOpen?.(true);
+        refetchData?.();
       }
     } catch (error) {
       console.error("Error submitting testimonial:", error);

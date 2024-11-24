@@ -11,12 +11,6 @@ export async function GET(
 
     const { id } = await params;
 
-    const session = await auth();
-
-    if (!session || !session.user) {
-      return Response.json({ message: "User doesn't exist" }, { status: 401 });
-    }
-
     const collection = await Collection.findOne({ collectionId: id });
 
     if (!collection) {
