@@ -18,10 +18,12 @@ import Twitter from "../svg/Twitter";
 
 interface TestimonialsControlsProps {
   setWriteTestimonialModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setImportTweetModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TestimonialsControls({
   setWriteTestimonialModalOpen,
+  setImportTweetModalOpen,
 }: TestimonialsControlsProps) {
   return (
     <div className="flex items-center justify-between">
@@ -50,7 +52,10 @@ export default function TestimonialsControls({
             >
               <Pen /> Text
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => setImportTweetModalOpen(true)}
+              className="cursor-pointer"
+            >
               <Twitter />
               Twitter
             </DropdownMenuItem>

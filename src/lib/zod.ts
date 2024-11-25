@@ -48,3 +48,7 @@ export const testimonialSchema = object({
   authorEmail: string().min(1, "Author email is required"),
   authorPhoto: string().optional(),
 });
+
+export const tweetSchema = object({
+  tweet: string().min(1, "Add a tweet link first"),
+});
