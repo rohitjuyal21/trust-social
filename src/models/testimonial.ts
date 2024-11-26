@@ -8,6 +8,9 @@ export interface ITestimonial extends Document {
   authorName: string;
   authorEmail: string;
   authorPhoto: string;
+  isTweet: boolean;
+  tweetUrl?: string;
+  tweetEmbedCode?: string;
 }
 
 const testimonialSchema = new Schema<ITestimonial>(
@@ -22,20 +25,27 @@ const testimonialSchema = new Schema<ITestimonial>(
     },
     rating: {
       type: Number,
-      required: true,
     },
     attachments: {
       type: [String],
     },
     authorName: {
       type: String,
-      required: true,
     },
     authorEmail: {
       type: String,
-      required: true,
     },
     authorPhoto: {
+      type: String,
+    },
+    isTweet: {
+      type: Boolean,
+      default: false,
+    },
+    tweetUrl: {
+      type: String,
+    },
+    tweetEmbedCode: {
       type: String,
     },
   },

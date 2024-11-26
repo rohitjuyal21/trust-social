@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from "react";
 import Loader from "../Loader";
 import TestimonialsControls from "./TestimonialsControls";
-import { ICollection, Testimonial } from "@/types/types";
+import { ICollection, ITwitterEmbed, Testimonial } from "@/types/types";
 import TestimonialCard from "./TestimonialCard";
 import WriteTestimonialModal from "../WriteTestimonialModal";
 import ImportTweetModal from "../ImportTweetModal";
+import { toast } from "sonner";
+import EmptyTestimonial from "./EmptyTestimonial";
+import TweetTestimonialCard from "./TweetTestimonialCard";
 
 interface TestimonialsWrapperProps {
   collectionId: string;
@@ -60,34 +63,30 @@ export default function TestimonialsWrapper({
     fetchTestimonials();
   };
 
-  const fetchTweet = async (tweetUrl: string) => {
+  const fetchEmbedTweet = async (
+    tweetUrl: string
+  ): Promise<ITwitterEmbed | null> => {
     try {
-      const response = await fetch("/api/fetch-tweet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tweetUrl }),
-      });
+      const response = await fetch(
+        `/api/twitter-oembed?tweetUrl=${encodeURIComponent(tweetUrl)}`
+      );
+      const data = await response.json();
 
       if (response.ok) {
-        const data = await response.json();
-        console.log("Fetched tweet:", data);
-        return data;
+        return data; // Return the embed data instead of setting state
       } else {
-        const error = await response.json();
-        console.error("Error fetching tweet:", error);
+        console.log(data.error || "Failed to fetch embed");
+        toast.error("Enter a valid tweet link!");
+        return null;
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (err) {
+      console.log("Enter a valid Link", err);
+      toast.error("Enter a valid tweet link!");
+      return null;
     }
   };
 
-  // Example usage
-  const tweetUrl = "https://x.com/elonmusk/status/1860766441122996246";
-  useEffect(() => {
-    fetchTweet(tweetUrl);
-  }, []);
+  console.log(testimonials);
   return (
     <div className="py-8 md:px-8 px-4 max-w-screen-xl w-full h-full">
       {isLoading ? (
@@ -100,14 +99,25 @@ export default function TestimonialsWrapper({
             setWriteTestimonialModalOpen={setIsWriteTestimonialModalOpen}
             setImportTweetModalOpen={setIsImportTweetModalOpen}
           />
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
-            {testimonials.map((testimonial) => (
-              <TestimonialCard
-                key={testimonial._id}
-                testimonial={testimonial}
-              />
-            ))}
-          </div>
+          {testimonials.length === 0 ? (
+            <EmptyTestimonial />
+          ) : (
+            <div className="columns-1 md:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
+              {testimonials.map((testimonial) =>
+                testimonial.isTweet ? (
+                  <TweetTestimonialCard
+                    key={testimonial._id}
+                    tweetEmbedCode={testimonial.tweetEmbedCode}
+                  />
+                ) : (
+                  <TestimonialCard
+                    key={testimonial._id}
+                    testimonial={testimonial}
+                  />
+                )
+              )}
+            </div>
+          )}
           <WriteTestimonialModal
             isOpen={isWriteTestimonialModalOpen}
             setIsOpen={setIsWriteTestimonialModalOpen}
@@ -117,6 +127,9 @@ export default function TestimonialsWrapper({
           <ImportTweetModal
             isOpen={isImportTweetModalOpen}
             setIsOpen={setIsImportTweetModalOpen}
+            fetchEmbedTweet={fetchEmbedTweet}
+            collection={collection}
+            refetchData={refetchData}
           />
         </div>
       )}

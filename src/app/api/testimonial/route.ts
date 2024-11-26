@@ -8,6 +8,7 @@ export async function POST(req: Request) {
     await dbConnect();
 
     const body = await req.json();
+
     const testimonial = await Testimonial.create({
       ...body,
     });
