@@ -50,11 +50,23 @@ export default function ImportTweetModal({
     setIsLoading(true);
     try {
       // Fetch the embed code for the tweet
+
       const embedTweet = await fetchEmbedTweet(value.tweet);
 
       if (!embedTweet) {
         return; // Exit if fetching embed fails
       }
+
+      const tweetIdMatch = embedTweet.url.match(/status\/(\d+)/);
+      const tweetId = tweetIdMatch ? tweetIdMatch[1] : null;
+
+      if (!tweetId) {
+        toast.error("Invalid tweet URL.");
+        setIsLoading(false);
+        return;
+      }
+
+      console.log(tweetId);
 
       // After successfully fetching the embed code, store the tweet in the database
       const response = await fetch("/api/testimonial", {
@@ -65,6 +77,7 @@ export default function ImportTweetModal({
         body: JSON.stringify({
           isTweet: true,
           tweetUrl: embedTweet.url,
+          tweetId,
           tweetEmbedCode: embedTweet?.html,
           collectionId: collection?._id,
           testimonial: "A testimonial from twitter",

@@ -1,4 +1,3 @@
-import { ICollection } from "@/types/types";
 import React from "react";
 import { Card } from "../ui/card";
 import { Layout, MessageSquare } from "lucide-react";

@@ -1,7 +1,6 @@
 .twitter-tweet {
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   margin-top: 0px !important;
   margin-bottom: 0px !important;
-  max-width: max-content !important;
 }

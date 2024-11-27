@@ -1,5 +1,5 @@
 import { ICollection } from "@/types/types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import Image from "next/image";
 import CollectionMenu from "./CollectionMenu";
@@ -20,7 +20,7 @@ export default function CollectionCard({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [testimonials, setTestimonials] = useState(0);
 
-  const fetchTestimonial = async () => {
+  const fetchTestimonial = useCallback(async () => {
     try {
       const response = await fetch(
         `/api/testimonial/${collection.collectionId}`
@@ -30,11 +30,11 @@ export default function CollectionCard({
     } catch (error) {
       console.log(`Error fetching testimonials: ${error}`);
     }
-  };
+  }, [collection]);
 
   useEffect(() => {
     fetchTestimonial();
-  }, []);
+  }, [fetchTestimonial]);
 
   return (
     <Card className="p-4 space-y-4">

@@ -33,6 +33,7 @@ export interface Testimonial {
   updatedAt: string;
   isTweet: boolean;
   tweetUrl?: string;
+  tweetId?: string;
   tweetEmbedCode?: string;
   _V: number;
 }

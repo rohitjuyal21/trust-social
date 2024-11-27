@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-import { Pen, Plus, Rocket } from "lucide-react";
+import { Pen, Plus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,26 +15,39 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import Twitter from "../svg/Twitter";
+import ShareTestimonialsModal from "./ShareTestimonialsModal";
 
 interface TestimonialsControlsProps {
   setWriteTestimonialModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setImportTweetModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  visibleTestimonials: "all" | "text" | "tweet";
+  setVisibleTestimonials: React.Dispatch<
+    React.SetStateAction<"all" | "text" | "tweet">
+  >;
 }
 
 export default function TestimonialsControls({
   setWriteTestimonialModalOpen,
   setImportTweetModalOpen,
+  visibleTestimonials,
+  setVisibleTestimonials,
 }: TestimonialsControlsProps) {
   return (
     <div className="flex items-center justify-between">
-      <Select defaultValue="all">
+      <Select
+        value={visibleTestimonials}
+        onValueChange={(val: "all" | "text" | "tweet") =>
+          setVisibleTestimonials(val)
+        }
+        defaultValue="all"
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All</SelectItem>
           <SelectItem value="text">Text</SelectItem>
-          <SelectItem value="twitter">Twitter</SelectItem>
+          <SelectItem value="tweet">Twitter</SelectItem>
         </SelectContent>
       </Select>
       <div className="flex gap-4">
@@ -61,9 +74,7 @@ export default function TestimonialsControls({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="outline">
-          <Rocket className="size-4" /> Share
-        </Button>
+        <ShareTestimonialsModal />
       </div>
     </div>
   );

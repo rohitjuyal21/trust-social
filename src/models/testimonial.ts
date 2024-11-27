@@ -10,6 +10,7 @@ export interface ITestimonial extends Document {
   authorPhoto: string;
   isTweet: boolean;
   tweetUrl?: string;
+  tweetId?: string;
   tweetEmbedCode?: string;
 }
 
@@ -43,6 +44,9 @@ const testimonialSchema = new Schema<ITestimonial>(
       default: false,
     },
     tweetUrl: {
+      type: String,
+    },
+    tweetId: {
       type: String,
     },
     tweetEmbedCode: {

@@ -23,6 +23,9 @@ export default function TestimonialsWrapper({
   const [isWriteTestimonialModalOpen, setIsWriteTestimonialModalOpen] =
     useState(false);
   const [isImportTweetModalOpen, setIsImportTweetModalOpen] = useState(false);
+  const [visibleTestimonials, setVisibleTestimonials] = useState<
+    "all" | "tweet" | "text"
+  >("all");
 
   const fetchTestimonials = async () => {
     try {
@@ -73,7 +76,7 @@ export default function TestimonialsWrapper({
       const data = await response.json();
 
       if (response.ok) {
-        return data; // Return the embed data instead of setting state
+        return data;
       } else {
         console.log(data.error || "Failed to fetch embed");
         toast.error("Enter a valid tweet link!");
@@ -86,7 +89,18 @@ export default function TestimonialsWrapper({
     }
   };
 
-  console.log(testimonials);
+  const filteredTestimonials = testimonials
+    .filter((testimonial) => {
+      if (visibleTestimonials === "all") return true;
+      if (visibleTestimonials === "tweet") return testimonial.isTweet;
+      if (visibleTestimonials === "text") return !testimonial.isTweet;
+      return true;
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
   return (
     <div className="py-8 md:px-8 px-4 max-w-screen-xl w-full h-full">
       {isLoading ? (
@@ -98,16 +112,18 @@ export default function TestimonialsWrapper({
           <TestimonialsControls
             setWriteTestimonialModalOpen={setIsWriteTestimonialModalOpen}
             setImportTweetModalOpen={setIsImportTweetModalOpen}
+            visibleTestimonials={visibleTestimonials}
+            setVisibleTestimonials={setVisibleTestimonials}
           />
-          {testimonials.length === 0 ? (
+          {filteredTestimonials.length === 0 ? (
             <EmptyTestimonial />
           ) : (
-            <div className="columns-1 md:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
-              {testimonials.map((testimonial) =>
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
+              {filteredTestimonials.map((testimonial) =>
                 testimonial.isTweet ? (
                   <TweetTestimonialCard
                     key={testimonial._id}
-                    tweetEmbedCode={testimonial.tweetEmbedCode}
+                    tweetId={testimonial.tweetId}
                   />
                 ) : (
                   <TestimonialCard
