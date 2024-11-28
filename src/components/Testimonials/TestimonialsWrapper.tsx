@@ -9,6 +9,7 @@ import ImportTweetModal from "../ImportTweetModal";
 import { toast } from "sonner";
 import EmptyTestimonial from "./EmptyTestimonial";
 import TweetTestimonialCard from "./TweetTestimonialCard";
+import EmbedCode from "../EmbedCode";
 
 interface TestimonialsWrapperProps {
   collectionId: string;
@@ -31,7 +32,9 @@ export default function TestimonialsWrapper({
     try {
       const response = await fetch(`/api/testimonial/${collectionId}`);
       const data = await response.json();
-      setTestimonials(data);
+      if (response.ok) {
+        setTestimonials(data);
+      }
     } catch (error) {
       console.log(`Error fetching testimonials: ${error}`);
     }
@@ -115,6 +118,7 @@ export default function TestimonialsWrapper({
             visibleTestimonials={visibleTestimonials}
             setVisibleTestimonials={setVisibleTestimonials}
           />
+          <EmbedCode collectionId={collection?.collectionId} />
           {filteredTestimonials.length === 0 ? (
             <EmptyTestimonial />
           ) : (
