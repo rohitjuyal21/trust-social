@@ -1,6 +1,11 @@
 import React from "react";
 
-const Logo = ({ className }: { className: string }) => {
+interface LogoProps {
+  className: string;
+  color?: string;
+}
+
+const Logo: React.FC<LogoProps> = ({ className, color }) => {
   return (
     <div>
       <svg
@@ -14,8 +19,8 @@ const Logo = ({ className }: { className: string }) => {
       >
         <g
           transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-          fill="hsl(var(--foreground))"
-          stroke="hsl(var(--foreground))"
+          fill={color || "hsl(var(--foreground))"}
+          stroke={color || "hsl(var(--foreground))"}
           strokeWidth="50"
         >
           <path

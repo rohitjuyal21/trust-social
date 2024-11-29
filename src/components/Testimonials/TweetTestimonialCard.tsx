@@ -4,16 +4,26 @@ import { TwitterTweetEmbed } from "react-twitter-embed";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useTheme } from "next-themes";
 
+interface TweetTestimonialCardProps {
+  tweetId: string | undefined;
+  paramsTheme?: string;
+}
+
 export default function TweetTestimonialCard({
   tweetId,
-}: {
-  tweetId: string | undefined;
-}) {
+  paramsTheme,
+}: TweetTestimonialCardProps) {
   const { theme } = useTheme(); // Access current theme
   const [embedTheme, setEmbedTheme] = useState<"dark" | "light">("light");
   const [key, setKey] = useState(0); // Add a key to force re-render
 
   useEffect(() => {
+    if (paramsTheme) {
+      const newTheme = paramsTheme === "dark" ? "dark" : "light";
+      setEmbedTheme(newTheme);
+      setKey((prev) => prev + 1);
+      return;
+    }
     // Function to update theme for "system"
     const updateSystemTheme = () => {
       const systemPrefersDark = window.matchMedia(

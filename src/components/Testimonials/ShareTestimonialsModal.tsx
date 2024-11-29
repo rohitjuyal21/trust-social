@@ -13,7 +13,13 @@ import { Rocket } from "lucide-react";
 import Grid from "../svg/Grid";
 import Carousel from "../svg/Carousel";
 
-export default function ShareTestimonialsModal() {
+interface ShareTestimonialsModalProps {
+  handleEmbedSelect: (embedType: "grid" | "carousel") => void;
+}
+
+export default function ShareTestimonialsModal({
+  handleEmbedSelect,
+}: ShareTestimonialsModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -38,7 +44,10 @@ export default function ShareTestimonialsModal() {
             </p>
           </div>
           <div className="flex justify-center gap-8">
-            <div className="rounded-md border bg-accent/30 p-4 cursor-pointer">
+            <div
+              onClick={() => handleEmbedSelect("grid")}
+              className="rounded-md border bg-accent/30 p-4 cursor-pointer"
+            >
               <div className="h-24">
                 <Grid />
               </div>
@@ -46,7 +55,10 @@ export default function ShareTestimonialsModal() {
                 Grid
               </p>
             </div>
-            <div className="rounded-md border bg-accent/30 p-4 cursor-pointer">
+            <div
+              onClick={() => handleEmbedSelect("carousel")}
+              className="rounded-md border bg-accent/30 p-4 cursor-pointer"
+            >
               <div className="h-24 flex items-center justify-center">
                 <Carousel />
               </div>

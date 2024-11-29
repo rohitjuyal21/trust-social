@@ -33,6 +33,9 @@ body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --testimonial: 0 0% 100%;
+    --testimonial-hover: 180deg 14.29% 97.25%;
+    --testimonial-border: 200 18.52% 84.12%;
   }
 
   .dark {
@@ -60,6 +63,9 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --testimonial: 210 34.38% 12.55%;
+    --testimonial-hover: 213, 25%, 16%;
+    --testimonial-border: 210 20.48% 32.55%;
   }
 }
 
@@ -68,6 +74,6 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }

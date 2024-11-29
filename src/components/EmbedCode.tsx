@@ -10,7 +10,7 @@ export default function EmbedCode({
 }: {
   collectionId: string | undefined;
 }) {
-  const embedCode = `<iframe src="${process.env.NEXT_PUBLIC_BASE_URL}/widget/${collectionId}" width="100%" height="500" frameborder="0" style="border:none;"></iframe>`;
+  const embedCode = `<iframe src="${process.env.NEXT_PUBLIC_BASE_URL}/widget/${collectionId}?theme=light" width="100%" height="500" frameborder="0" style="border:none;"></iframe>`;
 
   const [copied, setCopied] = useState(false);
 

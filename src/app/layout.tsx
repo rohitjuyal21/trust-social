@@ -35,9 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider>
-            <main className="mt-[72px] w-full flex items-center justify-center">
-              {children}
-            </main>
+            {children}
             <Toaster richColors />
           </SessionProvider>
         </ThemeProvider>

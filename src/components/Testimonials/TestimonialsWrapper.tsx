@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import EmptyTestimonial from "./EmptyTestimonial";
 import TweetTestimonialCard from "./TweetTestimonialCard";
 import EmbedCode from "../EmbedCode";
+import EmbedWallModal from "../EmbedWallModal";
 
 interface TestimonialsWrapperProps {
   collectionId: string;
@@ -24,9 +25,11 @@ export default function TestimonialsWrapper({
   const [isWriteTestimonialModalOpen, setIsWriteTestimonialModalOpen] =
     useState(false);
   const [isImportTweetModalOpen, setIsImportTweetModalOpen] = useState(false);
+  const [isEmbedWallModalOpen, setIsEmbedWallModalOpen] = useState(false);
   const [visibleTestimonials, setVisibleTestimonials] = useState<
     "all" | "tweet" | "text"
   >("all");
+  const [embedType, setEmbedType] = useState<"grid" | "carousel">("grid");
 
   const fetchTestimonials = async () => {
     try {
@@ -104,6 +107,11 @@ export default function TestimonialsWrapper({
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
+  const handleEmbedSelect = (embedType: "grid" | "carousel") => {
+    setEmbedType(embedType);
+    setIsEmbedWallModalOpen(true);
+  };
+
   return (
     <div className="py-8 md:px-8 px-4 max-w-screen-xl w-full h-full">
       {isLoading ? (
@@ -117,8 +125,8 @@ export default function TestimonialsWrapper({
             setImportTweetModalOpen={setIsImportTweetModalOpen}
             visibleTestimonials={visibleTestimonials}
             setVisibleTestimonials={setVisibleTestimonials}
+            handleEmbedSelect={handleEmbedSelect}
           />
-          <EmbedCode collectionId={collection?.collectionId} />
           {filteredTestimonials.length === 0 ? (
             <EmptyTestimonial />
           ) : (
@@ -150,6 +158,11 @@ export default function TestimonialsWrapper({
             fetchEmbedTweet={fetchEmbedTweet}
             collection={collection}
             refetchData={refetchData}
+          />
+          <EmbedWallModal
+            isOpen={isEmbedWallModalOpen}
+            setIsOpen={setIsEmbedWallModalOpen}
+            collectionId={collection?.collectionId}
           />
         </div>
       )}

@@ -24,6 +24,7 @@ interface TestimonialsControlsProps {
   setVisibleTestimonials: React.Dispatch<
     React.SetStateAction<"all" | "text" | "tweet">
   >;
+  handleEmbedSelect: (embedType: "grid" | "carousel") => void;
 }
 
 export default function TestimonialsControls({
@@ -31,6 +32,7 @@ export default function TestimonialsControls({
   setImportTweetModalOpen,
   visibleTestimonials,
   setVisibleTestimonials,
+  handleEmbedSelect,
 }: TestimonialsControlsProps) {
   return (
     <div className="flex items-center justify-between">
@@ -74,7 +76,7 @@ export default function TestimonialsControls({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <ShareTestimonialsModal />
+        <ShareTestimonialsModal handleEmbedSelect={handleEmbedSelect} />
       </div>
     </div>
   );

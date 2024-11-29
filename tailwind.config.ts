@@ -53,6 +53,9 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        testimonial: "hsl(var(--testimonial))",
+        "testimonial-hover": "hsl(var(--testimonial-hover))",
+        "testimonial-border": "hsl(var(--testimonial-border))",
       },
       borderRadius: {
         lg: "var(--radius)",

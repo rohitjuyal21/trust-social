@@ -12,7 +12,7 @@ interface TestimonialCardProps {
 
 export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <Card className="bg-accent/30 p-4 break-inside-avoid lg:mb-6 mb-4 rounded-xl">
+    <Card className="bg-testimonial border-testimonial-border hover:bg-testimonial-hover p-4 break-inside-avoid lg:mb-6 mb-4 rounded-xl">
       <div className="space-y-4">
         <div className="flex gap-4 items-center">
           <ImageViewer
