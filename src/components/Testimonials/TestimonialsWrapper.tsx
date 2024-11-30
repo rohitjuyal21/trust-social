@@ -163,6 +163,7 @@ export default function TestimonialsWrapper({
             isOpen={isEmbedWallModalOpen}
             setIsOpen={setIsEmbedWallModalOpen}
             collectionId={collection?.collectionId}
+            embedType={embedType}
           />
         </div>
       )}

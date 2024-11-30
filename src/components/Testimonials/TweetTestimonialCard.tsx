@@ -13,42 +13,15 @@ export default function TweetTestimonialCard({
   tweetId,
   paramsTheme,
 }: TweetTestimonialCardProps) {
-  const { theme } = useTheme(); // Access current theme
+  const { theme } = useTheme();
   const [embedTheme, setEmbedTheme] = useState<"dark" | "light">("light");
-  const [key, setKey] = useState(0); // Add a key to force re-render
-
+  const [key, setKey] = useState(0);
   useEffect(() => {
     if (paramsTheme) {
       const newTheme = paramsTheme === "dark" ? "dark" : "light";
       setEmbedTheme(newTheme);
       setKey((prev) => prev + 1);
       return;
-    }
-    // Function to update theme for "system"
-    const updateSystemTheme = () => {
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      const newTheme = systemPrefersDark ? "dark" : "light";
-      setEmbedTheme(newTheme);
-      setKey((prev) => prev + 1); // Increment key to re-render
-    };
-
-    // Handle theme changes
-    if (theme === "system") {
-      updateSystemTheme();
-      // Add listener for system theme changes
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      mediaQuery.addEventListener("change", updateSystemTheme);
-
-      // Cleanup listener
-      return () => {
-        mediaQuery.removeEventListener("change", updateSystemTheme);
-      };
-    } else {
-      const newTheme = theme === "dark" ? "dark" : "light";
-      setEmbedTheme(newTheme);
-      setKey((prev) => prev + 1); // Increment key to re-render
     }
   }, [theme]);
 
@@ -71,7 +44,7 @@ export default function TweetTestimonialCard({
         }
         tweetId={tweetId}
         options={{
-          theme: embedTheme, // Dynamically set theme
+          theme: embedTheme,
         }}
       />
     </div>

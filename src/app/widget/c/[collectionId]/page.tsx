@@ -1,19 +1,21 @@
 "use client";
 
-import EmptyTestimonial from "@/components/Testimonials/EmptyTestimonial";
 import TestimonialCard from "@/components/Testimonials/TestimonialCard";
 import TweetTestimonialCard from "@/components/Testimonials/TweetTestimonialCard";
 import { Testimonial } from "@/types/types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 import Logo from "@/components/svg/Logo";
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 
-import "../../../styles/embed.css";
+import "../../../../styles/embed.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
-export default function WidgetPage({
+export default function CarouselWidgetPage({
   params,
 }: {
   params: Promise<{ collectionId: string }>;
@@ -25,10 +27,10 @@ export default function WidgetPage({
 
   const searchParams = useSearchParams();
 
-  // Get theme from URL
   const parmasTheme = searchParams.get("theme") || "light";
 
   const { setTheme } = useTheme();
+  const sliderRef = useRef<any>(null);
 
   useEffect(() => {
     setTheme(parmasTheme);
@@ -65,11 +67,25 @@ export default function WidgetPage({
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
+  const settings = {
+    infinite: true,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    speed: 500,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    centerMode: true,
+    variableWidth: true,
+
+    // nextArrow: <CustomArrow direction="right" />,
+    // prevArrow: <CustomArrow direction="left" />,
+  };
+
   return (
-    <div className={`w-full `}>
+    <div className={`w-full bg-transparent p-4 `}>
       {filteredTestimonials.length > 0 && (
         <div className="space-y-4">
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
+          <Slider {...settings} ref={sliderRef}>
             {filteredTestimonials.map((testimonial) =>
               testimonial.isTweet ? (
                 <TweetTestimonialCard
@@ -84,7 +100,7 @@ export default function WidgetPage({
                 />
               )
             )}
-          </div>
+          </Slider>
           <div className="flex justify-center">
             <Link
               href="http://localhost:3000"

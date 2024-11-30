@@ -46,7 +46,10 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
           <div className="flex flex-wrap gap-4">
             {testimonial.attachments.map((attachment, index) => (
               <ImageViewer key={index} imageUrl={attachment}>
-                <div key={index} className="rounded-lg border overflow-hidden">
+                <div
+                  key={index}
+                  className="rounded-lg border-testimonial-border border bg-muted overflow-hidden"
+                >
                   <Image
                     src={attachment}
                     alt={`attachment ${index}`}

@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import ThemeToggle from "./Theme/ThemeToggle";
 import { useSession } from "next-auth/react";
 import ProfileMenu from "./ProfileMenu";
 import Logo from "./svg/Logo";
@@ -18,7 +17,7 @@ export default function Header() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 80, duration: 0.4 }}
-      className="p-4 md:px-6 md:py-4 border-b fixed left-0 w-full bg-background top-0 h-[72px]"
+      className="p-4 md:px-6 md:py-4 border-b fixed left-0 w-full bg-background top-0 h-[72px] z-10"
     >
       <div className="flex items-center justify-between">
         <Link
@@ -31,7 +30,7 @@ export default function Header() {
         </Link>
 
         <div className="flex gap-2 items-center">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
           {user ? (
             <ProfileMenu />
           ) : (

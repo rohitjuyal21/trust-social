@@ -24,9 +24,9 @@ export default function VisitorHeader() {
           <h4>TrustSocial</h4>
         </Link>
 
-        <div className="flex gap-2 items-center">
+        {/* <div className="flex gap-2 items-center">
           <ThemeToggle />
-        </div>
+        </div> */}
       </div>
     </motion.header>
   );

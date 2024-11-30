@@ -46,7 +46,7 @@ export default function ShareTestimonialsModal({
           <div className="flex justify-center gap-8">
             <div
               onClick={() => handleEmbedSelect("grid")}
-              className="rounded-md border bg-accent/30 p-4 cursor-pointer"
+              className="rounded-md border bg-accent/30 p-4 cursor-pointer hover:border-foreground/30"
             >
               <div className="h-24">
                 <Grid />
@@ -57,7 +57,7 @@ export default function ShareTestimonialsModal({
             </div>
             <div
               onClick={() => handleEmbedSelect("carousel")}
-              className="rounded-md border bg-accent/30 p-4 cursor-pointer"
+              className="rounded-md border bg-accent/30 p-4 cursor-pointer hover:border-foreground/30"
             >
               <div className="h-24 flex items-center justify-center">
                 <Carousel />

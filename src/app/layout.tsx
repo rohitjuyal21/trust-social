@@ -28,17 +28,10 @@ export default function RootLayout({
       <body
         className={`${inter.className} ${oswald.variable} antialiased min-h-screen flex`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SessionProvider>
-            {children}
-            <Toaster richColors />
-          </SessionProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          {children}
+          <Toaster richColors />
+        </SessionProvider>
       </body>
     </html>
   );

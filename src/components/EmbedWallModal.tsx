@@ -19,11 +19,13 @@ import {
   SelectValue,
 } from "./ui/select";
 import copy from "copy-to-clipboard";
+import { Copy } from "lucide-react";
 
 interface EmbedWallModalProps {
   collectionId: string | undefined;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  embedType: "grid" | "carousel";
 }
 
 const IframePreview = React.memo(({ embedCode }: { embedCode: string }) => {
@@ -34,12 +36,33 @@ export default function EmbedWallModal({
   collectionId,
   isOpen,
   setIsOpen,
+  embedType,
 }: EmbedWallModalProps) {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
+  console.log(embedType);
+
+  const iframeSrc =
+    embedType === "grid"
+      ? `${process.env.NEXT_PUBLIC_BASE_URL}/widget/g/${collectionId}?theme=${theme}`
+      : `${process.env.NEXT_PUBLIC_BASE_URL}/widget/c/${collectionId}?theme=${theme}`;
+
   const embedCode = useMemo(
     () =>
-      `<iframe src="${process.env.NEXT_PUBLIC_BASE_URL}/widget/${collectionId}?theme=${theme}" width="100%" height="500" frameborder="0" style="border:none;"></iframe>`,
-    [collectionId, theme]
+      `<iframe 
+        src=${iframeSrc}
+        id="iframe-${collectionId}" 
+        width="100%" 
+        height="600"
+        frameborder="0" 
+        style="border:none;" 
+        scrolling="no">
+      </iframe>
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.min.js"></script>
+      <script>
+        iFrameResize({ log: false }, "#iframe-${collectionId}");
+      </script>`,
+    [collectionId, theme, embedType]
   );
 
   const handleCopy = async () => {
@@ -67,7 +90,9 @@ export default function EmbedWallModal({
               className="cursor-pointer mb-4"
               onClick={handleCopy}
             />
-            <Button onClick={handleCopy}>Copy Embed Code</Button>
+            <Button onClick={handleCopy}>
+              <Copy className="size-4" /> Copy Embed Code
+            </Button>
           </div>
 
           <div>
