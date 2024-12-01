@@ -58,3 +58,17 @@
   --testimonial-hover: 213, 25%, 16%;
   --testimonial-border: 210 20.48% 32.55%;
 }
+
+.embla {
+  position: relative;
+}
+
+.embla__container {
+  display: flex;
+  touch-action: pan-y;
+}
+
+.embla__slide {
+  position: relative;
+  flex: 0 0 auto;
+}
