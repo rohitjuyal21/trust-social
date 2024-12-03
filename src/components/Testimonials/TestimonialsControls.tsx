@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-import { Pen, Plus } from "lucide-react";
+import { Pen, Plus, Rocket } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,8 +16,11 @@ import {
 } from "../ui/dropdown-menu";
 import Twitter from "../svg/Twitter";
 import ShareTestimonialsModal from "./ShareTestimonialsModal";
+import { Testimonial } from "@/types/types";
+import { toast } from "sonner";
 
 interface TestimonialsControlsProps {
+  testimonials: Testimonial[];
   setWriteTestimonialModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setImportTweetModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   visibleTestimonials: "all" | "text" | "tweet";
@@ -28,12 +31,23 @@ interface TestimonialsControlsProps {
 }
 
 export default function TestimonialsControls({
+  testimonials,
   setWriteTestimonialModalOpen,
   setImportTweetModalOpen,
   visibleTestimonials,
   setVisibleTestimonials,
   handleEmbedSelect,
 }: TestimonialsControlsProps) {
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const handleShareTestimonialsModal = () => {
+    if (testimonials.length === 0) {
+      return toast.error("You don't have any testimonials yet.");
+    } else {
+      setIsShareModalOpen(true);
+    }
+  };
+
   return (
     <div className="flex items-center justify-between">
       <Select
@@ -76,7 +90,16 @@ export default function TestimonialsControls({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <ShareTestimonialsModal handleEmbedSelect={handleEmbedSelect} />
+
+        <Button variant="outline" onClick={handleShareTestimonialsModal}>
+          <Rocket className="size-4" /> Share
+        </Button>
+
+        <ShareTestimonialsModal
+          isOpen={isShareModalOpen}
+          setIsOpen={setIsShareModalOpen}
+          handleEmbedSelect={handleEmbedSelect}
+        />
       </div>
     </div>
   );

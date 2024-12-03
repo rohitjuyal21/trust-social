@@ -1,16 +1,17 @@
 "use client";
+
 import React, { useMemo, useState } from "react";
+import { Copy } from "lucide-react";
+import copy from "copy-to-clipboard";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogTitle,
 } from "./ui/dialog";
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { toast } from "sonner";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
+
 import {
   Select,
   SelectContent,
@@ -18,8 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import copy from "copy-to-clipboard";
-import { Copy } from "lucide-react";
+
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
 
 interface EmbedWallModalProps {
   collectionId: string | undefined;
@@ -28,9 +30,14 @@ interface EmbedWallModalProps {
   embedType: "grid" | "carousel";
 }
 
-const IframePreview = React.memo(({ embedCode }: { embedCode: string }) => {
+const IframePreview = React.memo(function IframePreview({
+  embedCode,
+}: {
+  embedCode: string;
+}) {
   return <div dangerouslySetInnerHTML={{ __html: embedCode }} />;
 });
+IframePreview.displayName = "IframePreview";
 
 export default function EmbedWallModal({
   collectionId,
@@ -39,30 +46,35 @@ export default function EmbedWallModal({
   embedType,
 }: EmbedWallModalProps) {
   const [theme, setTheme] = useState("light");
-  console.log(embedType);
+  const [iframeSrc, setIframeSrc] = useState("");
 
-  const iframeSrc =
-    embedType === "grid"
-      ? `${process.env.NEXT_PUBLIC_BASE_URL}/widget/g/${collectionId}?theme=${theme}`
-      : `${process.env.NEXT_PUBLIC_BASE_URL}/widget/c/${collectionId}?theme=${theme}`;
+  React.useEffect(() => {
+    setIframeSrc(
+      embedType === "grid"
+        ? `${process.env.NEXT_PUBLIC_BASE_URL}/widget/g/${collectionId}?theme=${theme}`
+        : `${process.env.NEXT_PUBLIC_BASE_URL}/widget/c/${collectionId}?theme=${theme}`
+    );
+  }, [collectionId, theme, embedType]);
 
   const embedCode = useMemo(
     () =>
       `<iframe 
-        src=${iframeSrc}
-        id="iframe-${collectionId}" 
-        width="100%" 
-        height="600"
-        frameborder="0" 
-        style="border:none;" 
-        scrolling="no">
-      </iframe>
-      
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.min.js"></script>
-      <script>
-        iFrameResize({ log: false }, "#iframe-${collectionId}");
-      </script>`,
-    [collectionId, theme, embedType]
+          src="${iframeSrc}" 
+          id="iframe" 
+          width="100%" 
+          style="border:none;" 
+          scrolling="no"
+          allowtransparency="true"
+          onload="window.addEventListener('message', (event) => {
+            if (event.origin === '${process.env.NEXT_PUBLIC_BASE_URL}') {
+              const data = event.data;
+              if (data && data.type === 'setHeight') {
+                document.getElementById('iframe').style.height = data.height + 'px';
+              }
+            }
+          })">
+      </iframe>`,
+    [iframeSrc]
   );
 
   const handleCopy = async () => {

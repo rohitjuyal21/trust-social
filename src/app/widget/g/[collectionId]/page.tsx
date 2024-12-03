@@ -8,9 +8,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/svg/Logo";
 import { useSearchParams } from "next/navigation";
-import { useTheme } from "next-themes";
-
 import "../../../../styles/embed.css";
+import "iframe-resizer/js/iframeResizer.contentWindow";
 
 export default function GridWidgetPage({
   params,
@@ -27,12 +26,6 @@ export default function GridWidgetPage({
   // Get theme from URL
   const parmasTheme = searchParams.get("theme") || "light";
 
-  const { setTheme } = useTheme();
-
-  useEffect(() => {
-    setTheme(parmasTheme);
-  }, [parmasTheme, setTheme]);
-
   useEffect(() => {
     async function unwrapParams() {
       const unwrappedParams = await params;
@@ -41,6 +34,22 @@ export default function GridWidgetPage({
 
     unwrapParams();
   }, [params]);
+
+  useEffect(() => {
+    const sendHeight = () => {
+      const height = document.body.scrollHeight;
+      window.parent.postMessage({ type: "setHeight", height }, "*");
+    };
+
+    // Send the height on load
+    sendHeight();
+
+    // Observe changes in the DOM and send height updates
+    const observer = new MutationObserver(sendHeight);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
 
   const fetchTestimonials = async () => {
     try {

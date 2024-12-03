@@ -62,7 +62,6 @@ export default function CreateCollectionModal({
       headerTitle: "",
       customMessage: "",
       questions: collectionQuestions,
-      collectStarRatings: false,
       customButtonColor: "",
       thankYouPage: thankYouPageDefaults,
     },
@@ -78,7 +77,6 @@ export default function CreateCollectionModal({
         headerTitle: "",
         customMessage: "",
         questions: collectionQuestions,
-        collectStarRatings: false,
         customButtonColor: "",
         thankYouPage: thankYouPageDefaults,
       });

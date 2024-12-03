@@ -4,29 +4,25 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog";
 
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { Button } from "../ui/button";
-import { Rocket } from "lucide-react";
 import Grid from "../svg/Grid";
 import Carousel from "../svg/Carousel";
 
 interface ShareTestimonialsModalProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleEmbedSelect: (embedType: "grid" | "carousel") => void;
 }
 
 export default function ShareTestimonialsModal({
+  isOpen,
+  setIsOpen,
   handleEmbedSelect,
 }: ShareTestimonialsModalProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          <Rocket className="size-4" /> Share
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="rounded-lg max-w-screen-md">
         <VisuallyHidden.Root>
           <DialogTitle>Import Tweet</DialogTitle>

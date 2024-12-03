@@ -14,7 +14,6 @@ export interface ICollection extends Document {
   headerTitle: string;
   customMessage: string;
   questions: string[];
-  collectStarRatings: boolean;
   customButtonColor?: string;
   thankYouPage?: IThankYouPage;
   createdAt?: Date;
@@ -60,10 +59,6 @@ const collectionSchema = new Schema<ICollection>(
     },
     questions: {
       type: [String],
-      required: true,
-    },
-    collectStarRatings: {
-      type: Boolean,
       required: true,
     },
     customButtonColor: {

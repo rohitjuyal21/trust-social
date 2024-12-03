@@ -25,8 +25,8 @@ import {
 } from "@/app/actions/authActions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import ClipLoader from "react-spinners/ClipLoader";
 import { useSession } from "next-auth/react";
+import LoadingButton from "./LoadingButton";
 
 type SignInSchema = z.infer<typeof signInSchema>;
 
@@ -97,13 +97,6 @@ export default function SignIn() {
           <h4 className="text-3xl md:text-4xl text-center font-bold font-oswald ">
             Hi, Welcome Back!
           </h4>
-          {/* <Image
-            src="/assets/hi-wave.gif"
-            alt="wave"
-            width={32}
-            height={32}
-            unoptimized
-          /> */}
         </div>
 
         <Form {...form}>
@@ -179,18 +172,7 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
-              <Button disabled={isLoading}>
-                {isLoading ? (
-                  <ClipLoader
-                    color="hsl(var(--foreground))"
-                    size={28}
-                    loading={isLoading}
-                    className="text-foreground"
-                  />
-                ) : (
-                  "Sign In"
-                )}
-              </Button>
+              <LoadingButton isLoading={isLoading}>Sign In</LoadingButton>
               <p className="text-xs text-muted-foreground text-center">
                 Don&apos;t have an accocunt?{" "}
                 <Link

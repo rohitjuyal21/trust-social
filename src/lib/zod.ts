@@ -1,4 +1,4 @@
-import { array, boolean, number, object, string } from "zod";
+import { array, number, object, string } from "zod";
 
 export const signInSchema = object({
   email: string({ required_error: "Email is required" })
@@ -31,7 +31,6 @@ export const collectionSchema = object({
     1,
     "At least one question is required"
   ),
-  collectStarRatings: boolean(),
   customButtonColor: string().optional(),
   thankYouPage: object({
     thankYouPageTitle: string().optional(),

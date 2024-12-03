@@ -41,7 +41,7 @@ export async function handleCredentialsSignIn({
 }
 
 export async function handleGoogleSignin() {
-  await signIn("google", { redirectTo: "/" });
+  await signIn("google", { redirectTo: "/dashboard" });
 }
 
 export async function handleCredentialsSignUp({

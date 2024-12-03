@@ -16,6 +16,10 @@ export default function Collections({
   deleteCollection,
   onEditClick,
 }: CollectionsProps) {
+  const filteredCollections = collections.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -23,7 +27,7 @@ export default function Collections({
         <CreateCollectionButton setIsOpen={setIsOpen} />
       </div>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {collections.map((collection) => (
+        {filteredCollections.map((collection) => (
           <CollectionCard
             key={collection._id}
             collection={collection}

@@ -8,14 +8,19 @@ import { Star } from "lucide-react";
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
+  theme?: "light" | "dark";
 }
 
-export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
+export default function TestimonialCard({
+  testimonial,
+  theme,
+}: TestimonialCardProps) {
   return (
     <Card className="bg-testimonial border-testimonial-border hover:bg-testimonial-hover p-4 break-inside-avoid lg:mb-6 mb-4 rounded-xl flex-1">
       <div className="space-y-4">
         <div className="flex gap-4 items-center">
           <ImageViewer
+            theme={theme}
             imageUrl={
               testimonial.authorPhoto ||
               `https://api.dicebear.com/9.x/initials/svg?seed=${testimonial.authorName}&chars=1`
@@ -45,7 +50,7 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
         {testimonial.attachments.length > 0 && (
           <div className="flex flex-wrap gap-4">
             {testimonial.attachments.map((attachment, index) => (
-              <ImageViewer key={index} imageUrl={attachment}>
+              <ImageViewer key={index} theme={theme} imageUrl={attachment}>
                 <div
                   key={index}
                   className="rounded-lg border-testimonial-border border bg-muted overflow-hidden"

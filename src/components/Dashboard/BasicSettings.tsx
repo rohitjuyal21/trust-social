@@ -14,7 +14,6 @@ import { Button } from "../ui/button";
 import { Edit, Plus, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Textarea } from "../ui/textarea";
-import { Switch } from "../ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { SketchPicker } from "react-color";
 import { UseFormReturn } from "react-hook-form";
@@ -224,23 +223,6 @@ export default function BasicSettings({
               {form.formState.errors.questions?.ref?.name === "questions" && (
                 <FormMessage />
               )}
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="collectStarRatings"
-          render={({ field }) => (
-            <FormItem className="flex gap-4 items-center space-y-0">
-              <FormLabel>Collect star ratings</FormLabel>
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  className="mt-0"
-                />
-              </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />

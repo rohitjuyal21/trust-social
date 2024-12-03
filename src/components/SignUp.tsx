@@ -25,9 +25,9 @@ import {
   handleGoogleSignin,
 } from "@/app/actions/authActions";
 import { useRouter } from "next/navigation";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import LoadingButton from "./LoadingButton";
 
 type SignUpSchema = z.infer<typeof signUpSchema>;
 
@@ -175,18 +175,7 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <Button disabled={isLoading}>
-                {isLoading ? (
-                  <ClipLoader
-                    color="hsl(var(--foreground))"
-                    size={28}
-                    loading={isLoading}
-                    className="text-foreground"
-                  />
-                ) : (
-                  "Sign Up"
-                )}
-              </Button>
+              <LoadingButton isLoading={isLoading}>Sign Up</LoadingButton>
               <p className="text-xs text-muted-foreground text-center">
                 Already have an account?{" "}
                 <Link

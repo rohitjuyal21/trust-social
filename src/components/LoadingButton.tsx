@@ -19,7 +19,7 @@ export default function LoadingButton({
     <Button disabled={isLoading} className={className} variant={variant}>
       {isLoading ? (
         <ClipLoader
-          color="hsl(var(--foreground))"
+          color="white"
           size={28}
           loading={isLoading}
           className="text-foreground"

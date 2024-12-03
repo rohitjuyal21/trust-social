@@ -9,7 +9,6 @@ import ImportTweetModal from "../ImportTweetModal";
 import { toast } from "sonner";
 import EmptyTestimonial from "./EmptyTestimonial";
 import TweetTestimonialCard from "./TweetTestimonialCard";
-import EmbedCode from "../EmbedCode";
 import EmbedWallModal from "../EmbedWallModal";
 
 interface TestimonialsWrapperProps {
@@ -121,6 +120,7 @@ export default function TestimonialsWrapper({
       ) : (
         <div className="w-full space-y-8 flex flex-col h-full">
           <TestimonialsControls
+            testimonials={testimonials}
             setWriteTestimonialModalOpen={setIsWriteTestimonialModalOpen}
             setImportTweetModalOpen={setIsImportTweetModalOpen}
             visibleTestimonials={visibleTestimonials}
