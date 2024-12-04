@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import dbConnect from "@/lib/dbConnect";
 import { Collection } from "@/models/collection";
 import { Testimonial } from "@/models/testimonial";

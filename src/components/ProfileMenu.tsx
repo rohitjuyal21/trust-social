@@ -10,6 +10,7 @@ import {
 } from "./ui/dropdown-menu";
 import Link from "next/link";
 import { LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { toast } from "sonner";
 
 const ProfileMenu = () => {
   const { data: session } = useSession();
@@ -17,9 +18,13 @@ const ProfileMenu = () => {
   const user = session?.user;
 
   const handleSignOut = async () => {
-    await signOut({ redirectTo: "/sign-in" });
+    try {
+      await signOut({ redirectTo: "/sign-in" });
+      toast.success("Logged out successfully");
+    } catch {
+      toast.error("Failed to logout");
+    }
   };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

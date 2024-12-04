@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import dbConnect from "@/lib/dbConnect";
 import { Collection } from "@/models/collection";
+import { Testimonial } from "@/models/testimonial";
 
 export async function POST(req: Request) {
   try {
@@ -84,6 +85,8 @@ export async function DELETE(req: Request) {
     }
 
     await Collection.findByIdAndDelete(body.id);
+
+    await Testimonial.deleteMany({ collectionId: body.id });
 
     return Response.json(
       { message: "Collection deleted successfully" },

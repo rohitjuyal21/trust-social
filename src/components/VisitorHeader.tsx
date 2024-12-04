@@ -2,7 +2,6 @@
 import Link from "next/link";
 
 import { motion } from "framer-motion";
-import ThemeToggle from "./Theme/ThemeToggle";
 
 import Logo from "./svg/Logo";
 

@@ -62,6 +62,7 @@ const CollectionsWrapper = () => {
       if (response.ok) {
         toast.success("Collection deleted successfully");
         await fetchCollections();
+        await fetchTestimonials();
       } else {
         toast.error(data.message);
       }

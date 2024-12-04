@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
 
 import "./globals.css";
-import ThemeProvider from "@/components/Theme/ThemeProvider";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 
