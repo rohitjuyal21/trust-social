@@ -28,7 +28,7 @@ export default function TweetTestimonialCard({
   if (!tweetId) return null;
 
   return (
-    <div className="lg:mb-6 mb-4 flex-1">
+    <div className="lg:mb-6 mb-4 flex-1 break-inside-avoid">
       {/* Use the key prop to force re-render */}
       <TwitterTweetEmbed
         key={key} // Re-render on theme change

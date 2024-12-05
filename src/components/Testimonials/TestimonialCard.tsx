@@ -6,6 +6,14 @@ import ImageViewer from "../ImageViewer";
 import { format } from "date-fns";
 import { Star } from "lucide-react";
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/carousel";
+
 interface TestimonialCardProps {
   testimonial: Testimonial;
   theme?: "light" | "dark";
@@ -47,26 +55,37 @@ export default function TestimonialCard({
           <p className="">{testimonial.testimonial}</p>
         </div>
 
-        {testimonial.attachments.length > 0 && (
-          <div className="flex flex-wrap gap-4">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className={testimonial.attachments.length > 1 ? "mx-5" : ""}
+        >
+          <CarouselContent className="">
             {testimonial.attachments.map((attachment, index) => (
-              <ImageViewer key={index} theme={theme} imageUrl={attachment}>
-                <div
-                  key={index}
-                  className="rounded-lg border-testimonial-border border bg-muted overflow-hidden"
-                >
-                  <Image
-                    src={attachment}
-                    alt={`attachment ${index}`}
-                    width={0}
-                    height={0}
-                    className="w-28 h-28 object-contain"
-                  />
-                </div>
-              </ImageViewer>
+              <CarouselItem key={index}>
+                <ImageViewer theme={theme} imageUrl={attachment}>
+                  <div className="max-h-48 h-full flex items-center w-full">
+                    <Image
+                      src={attachment}
+                      alt={`attachment ${index}`}
+                      width={0}
+                      height={0}
+                      className="w-full h-full rounded-md"
+                    />
+                  </div>
+                </ImageViewer>
+              </CarouselItem>
             ))}
-          </div>
-        )}
+          </CarouselContent>
+          {testimonial.attachments.length > 1 && (
+            <>
+              <CarouselPrevious className="-left-7 h-6 w-6" />
+              <CarouselNext className="-right-7 h-6 w-6" />
+            </>
+          )}
+        </Carousel>
 
         <div className="flex items-center justify-between gap-2">
           <div className="text-muted-foreground text-sm font-medium">

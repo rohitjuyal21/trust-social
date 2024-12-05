@@ -100,7 +100,7 @@ export default function GridWidgetPage({
               className="font-oswald text-xl font-semibold flex items-center gap-0.5"
               title="Trust Social"
             >
-              <Logo className="h-7 w-7" />
+              <Logo className="h-7 w-7" color="black" />
               <h4>TrustSocial</h4>
             </Link>
           </div>

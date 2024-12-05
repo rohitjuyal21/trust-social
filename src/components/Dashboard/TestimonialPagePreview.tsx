@@ -58,7 +58,7 @@ export default function TestimonialPagePreview({
           className="w-full"
           style={{ backgroundColor: customButtonColor }}
         >
-          Send <Pencil className="size-4" />
+          Send Testimonial <Pencil className="size-4" />
         </Button>
       </div>
     </div>

@@ -20,6 +20,7 @@ import { UseFormReturn } from "react-hook-form";
 import ImageUpload from "./ImageUpload";
 import LoadingButton from "../LoadingButton";
 import { convertToKebabCase } from "@/lib/stringUtils";
+import { convertToBase64 } from "@/lib/convertToBase64";
 
 interface BasicSettingsProps {
   form: UseFormReturn<z.infer<typeof collectionSchema>>;
@@ -41,17 +42,6 @@ export default function BasicSettings({
       form.setValue("collectionLogo", base64 as string);
       form.trigger("collectionLogo");
     }
-  };
-
-  const convertToBase64 = (
-    file: File
-  ): Promise<string | ArrayBuffer | null> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
   };
 
   const handleClearLogo = () => {
