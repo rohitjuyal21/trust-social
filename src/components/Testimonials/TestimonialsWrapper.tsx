@@ -130,7 +130,7 @@ export default function TestimonialsWrapper({
           {filteredTestimonials.length === 0 ? (
             <EmptyTestimonial />
           ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-x-4 lg:gap-y-6 flex-1">
               {filteredTestimonials.map((testimonial) =>
                 testimonial.isTweet ? (
                   <TweetTestimonialCard

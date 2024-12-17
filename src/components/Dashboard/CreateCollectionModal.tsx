@@ -83,6 +83,30 @@ export default function CreateCollectionModal({
     }
   }, [defaultValues, form]);
 
+  const ensureUniqueCollectionId = async (id: string) => {
+    try {
+      const response = await fetch(`/api/collection/exists`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ collectionId: id }),
+      });
+      const { exists } = await response.json();
+      console.log("Collection ID exists:", exists);
+      if (exists) {
+        const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+        const newId = `${id}${randomSuffix}`;
+        return await ensureUniqueCollectionId(newId);
+      }
+      console.log("Collection ID is unique:", id);
+      return id;
+    } catch (error) {
+      console.error("Error checking collectionId uniqueness:", error);
+      return id;
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof collectionSchema>) => {
     setIsLoading(true);
     const finalValues = {
@@ -100,7 +124,10 @@ export default function CreateCollectionModal({
       },
     };
 
-    const collectionId = convertToKebabCase(values.collectionName);
+    const olderCollectionId = convertToKebabCase(values.collectionName);
+
+    const collectionId = await ensureUniqueCollectionId(olderCollectionId);
+
     if (isEditing) {
       try {
         const response = await fetch(`api/collection/${defaultValues?._id}`, {

@@ -66,8 +66,6 @@ export default function ImportTweetModal({
         return;
       }
 
-      console.log(tweetId);
-
       // After successfully fetching the embed code, store the tweet in the database
       const response = await fetch("/api/testimonial", {
         method: "POST",
