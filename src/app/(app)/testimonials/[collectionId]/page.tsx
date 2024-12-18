@@ -4,7 +4,7 @@ import React from "react";
 export default async function page({
   params,
 }: {
-  params: { collectionId: string };
+  params: Promise<{ collectionId: string }>;
 }) {
   const { collectionId } = await params;
   return <TestimonialsWrapper collectionId={collectionId} />;

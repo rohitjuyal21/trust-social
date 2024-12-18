@@ -4,7 +4,7 @@ import { Testimonial } from "@/models/testimonial";
 
 export async function GET(
   req: Request,
-  { params }: { params: { collectionId: string } }
+  { params }: { params: Promise<{ collectionId: string }> }
 ) {
   try {
     await dbConnect();

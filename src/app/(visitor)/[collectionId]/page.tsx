@@ -4,7 +4,7 @@ import React from "react";
 export default async function Page({
   params,
 }: {
-  params: { collectionId: string };
+  params: Promise<{ collectionId: string }>;
 }) {
   const { collectionId } = await params;
 
