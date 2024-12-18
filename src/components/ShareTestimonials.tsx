@@ -47,17 +47,17 @@ export default function ShareTestimonials({
         </div>
       </div>
       <div className="max-w-screen-xl mx-auto w-full flex flex-col flex-1">
-        <div className="py-8 md:px-8 px-4 flex items-center justify-center flex-1 w-full">
+        <div className="py-8 md:px-8 px-4 flex flex-col items-center justify-center flex-1 w-full">
           {isLoading ? (
             <div className="flex justify-center items-center ">
               <Loader />
             </div>
           ) : (
-            <div className="w-full space-y-8 flex flex-col h-full">
+            <div className="w-full space-y-8 flex flex-col h-full flex-1">
               {sortedTestimonials.length === 0 ? (
                 <EmptyTestimonial />
               ) : (
-                <div>
+                <div className="flex flex-col flex-1">
                   <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-x-4 lg:gap-y-6 flex-1 flex-wrap">
                     {sortedTestimonials.map((testimonial) =>
                       testimonial.isTweet ? (
