@@ -157,7 +157,7 @@ export default function CarouselWidgetPage({
 
       <div className="flex justify-center mt-4">
         <Link
-          href="http://localhost:3000"
+          href={process.env.NEXT_PUBLIC_BASE_URL!}
           target="_blank"
           className="font-oswald text-xl font-semibold flex items-center gap-0.5"
           title="Trust Social"

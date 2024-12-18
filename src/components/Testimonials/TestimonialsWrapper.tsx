@@ -126,6 +126,7 @@ export default function TestimonialsWrapper({
             visibleTestimonials={visibleTestimonials}
             setVisibleTestimonials={setVisibleTestimonials}
             handleEmbedSelect={handleEmbedSelect}
+            collectionId={collectionId}
           />
           {filteredTestimonials.length === 0 ? (
             <EmptyTestimonial />

@@ -28,6 +28,7 @@ interface TestimonialsControlsProps {
     React.SetStateAction<"all" | "text" | "tweet">
   >;
   handleEmbedSelect: (embedType: "grid" | "carousel") => void;
+  collectionId: string;
 }
 
 export default function TestimonialsControls({
@@ -37,6 +38,7 @@ export default function TestimonialsControls({
   visibleTestimonials,
   setVisibleTestimonials,
   handleEmbedSelect,
+  collectionId,
 }: TestimonialsControlsProps) {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
@@ -99,6 +101,7 @@ export default function TestimonialsControls({
           isOpen={isShareModalOpen}
           setIsOpen={setIsShareModalOpen}
           handleEmbedSelect={handleEmbedSelect}
+          collectionId={collectionId}
         />
       </div>
     </div>

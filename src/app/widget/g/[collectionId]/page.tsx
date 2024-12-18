@@ -94,7 +94,7 @@ export default function GridWidgetPage({
           </div>
           <div className="flex justify-center">
             <Link
-              href="http://localhost:3000"
+              href={process.env.NEXT_PUBLIC_BASE_URL!}
               target="_blank"
               className="font-oswald text-xl font-semibold flex items-center gap-0.5"
               title="Trust Social"
