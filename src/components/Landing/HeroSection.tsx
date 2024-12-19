@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Button } from "../ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -14,9 +14,14 @@ const HeroSection = () => {
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.4 }}
         >
-          <h1 className="text-5xl font-bold text-center max-w-3xl">
-            Share your success through customer voices
-          </h1>
+          <div className="flex items-center justify-center flex-col">
+            <div className="inline-flex gap-2 justify-center items-center mb-4 bg-muted rounded-full px-4 py-1.5 text-sm font-medium border shadow-inner">
+              <Sparkles className="text-amber-400 size-4" /> 100% Free Forever
+            </div>
+            <h1 className="text-5xl font-bold text-center max-w-3xl">
+              Share your success through customer voices
+            </h1>
+          </div>
         </motion.div>
         <motion.div
           initial={{ y: 100, opacity: 0 }}
