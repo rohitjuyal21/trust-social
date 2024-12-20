@@ -112,7 +112,7 @@ export default function TestimonialsWrapper({
   };
 
   return (
-    <div className="py-8 md:px-8 px-4 max-w-screen-xl w-full h-full">
+    <div className="py-8 max-w-screen-xl w-full h-full">
       {isLoading ? (
         <div className="flex justify-center items-center h-full">
           <Loader />

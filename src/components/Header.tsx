@@ -17,7 +17,7 @@ export default function Header() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 80, duration: 0.4 }}
-      className="p-4 md:px-6 md:py-4 border-b fixed left-0 w-full bg-background top-0 h-[72px] z-10"
+      className="p-4 md:px-6 md:py-4  border sticky left-0 w-full h-[72px] z-10 max-w-screen-xl backdrop-blur-lg top-3 rounded-lg"
     >
       <div className="flex items-center justify-between">
         <Link

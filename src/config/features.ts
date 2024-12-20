@@ -1,4 +1,4 @@
-import { Archive, Code2, Folder, Link, Twitter } from "lucide-react";
+import { Archive, Code2, Folder, Infinity, Link, Twitter } from "lucide-react";
 
 export const features = [
   {
@@ -29,5 +29,11 @@ export const features = [
     title: "Easy Collection",
     description:
       "Custom forms to collect new testimonials from your customers.",
+  },
+  {
+    icon: Infinity,
+    title: "Unlimited Access",
+    description:
+      "Create unlimited collections and add unlimited testimonials — all for free.",
   },
 ];
