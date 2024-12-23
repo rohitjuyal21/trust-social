@@ -4,7 +4,6 @@ import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
-import Background from "@/components/Background";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +28,7 @@ export default function RootLayout({
         className={`${inter.className} ${oswald.variable} antialiased min-h-screen flex`}
       >
         <SessionProvider>
-          <Background>{children}</Background>
+          {children}
           <Toaster richColors />
         </SessionProvider>
       </body>

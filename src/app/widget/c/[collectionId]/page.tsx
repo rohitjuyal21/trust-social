@@ -28,7 +28,8 @@ export default function CarouselWidgetPage({
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [collectionId, setCollectionId] = useState<string | null>(null);
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL!;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+
   const searchParams = useSearchParams();
   const parmasTheme = (searchParams.get("theme") || "light") as
     | "light"
@@ -83,6 +84,9 @@ export default function CarouselWidgetPage({
   const filteredTestimonials = testimonials.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
+
+  console.log(collectionId);
+
   const CustomRightArrow = ({ onClick }: { onClick?: () => void }) => (
     <Button
       variant="secondary"
