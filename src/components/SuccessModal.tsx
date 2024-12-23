@@ -32,15 +32,17 @@ export default function SuccessModal({
           <DialogDescription>Description</DialogDescription>
         </VisuallyHidden.Root>
 
-        <div className="space-y-2 p-4">
-          <div className="rounded-md overflow-hidden">
-            <Image
-              src={image || "/assets/excited-dwight.webp"}
-              alt="collection-success"
-              width={0}
-              height={0}
-              className="w-full max-h-56 object-cover object-top"
-            />
+        <div className="space-y-2 ">
+          <div className="p-4">
+            <div className="rounded-md overflow-hidden">
+              <Image
+                src={image || "/assets/excited-dwight.webp"}
+                alt="collection-success"
+                width={0}
+                height={0}
+                className="w-full max-h-56 object-cover object-top"
+              />
+            </div>
           </div>
           {children}
         </div>
