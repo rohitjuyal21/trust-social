@@ -4,6 +4,7 @@ import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -52,6 +53,7 @@ export default function RootLayout({
         <SessionProvider>
           {children}
           <Toaster richColors />
+          <Analytics />
         </SessionProvider>
       </body>
     </html>
