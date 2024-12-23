@@ -36,9 +36,9 @@ export default function TestimonialPage({
   }, [fetchCollection]);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex-1">
       {isLoading ? (
-        <div className="flex items-center justify-center">
+        <div className="flex  h-full items-center justify-center">
           <Loader />
         </div>
       ) : (

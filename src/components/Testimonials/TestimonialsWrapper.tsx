@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Loader from "../Loader";
 import TestimonialsControls from "./TestimonialsControls";
 import { ICollection, ITwitterEmbed, Testimonial } from "@/types/types";
@@ -30,7 +30,7 @@ export default function TestimonialsWrapper({
   >("all");
   const [embedType, setEmbedType] = useState<"grid" | "carousel">("grid");
 
-  const fetchTestimonials = async () => {
+  const fetchTestimonials = useCallback(async () => {
     try {
       const response = await fetch(`/api/testimonial/${collectionId}`);
       const data = await response.json();
@@ -40,9 +40,9 @@ export default function TestimonialsWrapper({
     } catch (error) {
       console.log(`Error fetching testimonials: ${error}`);
     }
-  };
+  }, [collectionId]);
 
-  const fetchCollection = async () => {
+  const fetchCollection = useCallback(async () => {
     try {
       const response = await fetch(`/api/collection/${collectionId}`);
       const data = await response.json();
@@ -50,7 +50,7 @@ export default function TestimonialsWrapper({
     } catch (error) {
       console.log(`Error fetching Collection: ${error}`);
     }
-  };
+  }, [collectionId]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +64,7 @@ export default function TestimonialsWrapper({
     };
 
     fetchData();
-  }, []);
+  }, [fetchCollection, fetchTestimonials]);
 
   const refetchData = () => {
     fetchCollection();

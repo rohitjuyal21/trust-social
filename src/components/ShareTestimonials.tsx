@@ -40,14 +40,12 @@ export default function ShareTestimonials({
   );
 
   return (
-    <div className="flex flex-col h-full w-full min-h-screen">
-      <div className="border-b">
-        <div className="flex items-center md:px-8 px-4 text-xl font-bold  max-w-screen-xl mx-auto w-full h-16">
-          {collectionId}
-        </div>
+    <div className="flex flex-col h-full w-full min-h-screen items-center md:px-6 lg:px-8 px-4 py-6">
+      <div className="p-4 md:px-6 md:py-4  border sticky left-0 w-full h-[72px] z-10 max-w-screen-xl backdrop-blur-lg top-3 rounded-lg flex items-center">
+        <h2 className="text-xl font-bold ">{collectionId}</h2>
       </div>
       <div className="max-w-screen-xl mx-auto w-full flex flex-col flex-1">
-        <div className="py-8 md:px-8 px-4 flex flex-col items-center justify-center flex-1 w-full">
+        <div className="py-8 flex flex-col items-center justify-center flex-1 w-full">
           {isLoading ? (
             <div className="flex justify-center items-center ">
               <Loader />
