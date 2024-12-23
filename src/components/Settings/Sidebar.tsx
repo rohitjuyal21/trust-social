@@ -16,7 +16,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sm:w-64 w-20 border-r h-full fixed top-[72px] left-0">
+    <aside className="sm:w-64 w-20 border-r h-full left-0">
       <div className="flex flex-col gap-2 px-4 py-8">
         <div
           className={cn(
