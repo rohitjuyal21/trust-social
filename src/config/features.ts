@@ -1,4 +1,4 @@
-import { Archive, Code2, Folder, Infinity, Link, Twitter } from "lucide-react";
+import { Code2, FileText, Folder, Infinity, Link, Twitter } from "lucide-react";
 
 export const features = [
   {
@@ -6,6 +6,12 @@ export const features = [
     title: "Create Collections",
     description:
       "Organize testimonials into custom collections for different products, services, or campaigns.",
+  },
+  {
+    icon: FileText,
+    title: "Text Testimonials",
+    description:
+      "Collect text testimonials from your customers to build trust and credibility.",
   },
   {
     icon: Twitter,
@@ -23,12 +29,6 @@ export const features = [
     icon: Code2,
     title: "Embed Anywhere",
     description: "Add testimonials to your website with our simple embed code.",
-  },
-  {
-    icon: Archive,
-    title: "Easy Collection",
-    description:
-      "Custom forms to collect new testimonials from your customers.",
   },
   {
     icon: Infinity,
