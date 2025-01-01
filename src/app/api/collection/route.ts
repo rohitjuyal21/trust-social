@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { uploadImageToCloudinary } from "@/lib/cloudinaryUpload";
 import dbConnect from "@/lib/dbConnect";
 import { Collection } from "@/models/collection";
 import { Testimonial } from "@/models/testimonial";
@@ -14,6 +15,16 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
+    const collectionLogoUrl = await uploadImageToCloudinary(
+      body.collectionLogo,
+      "collection-logo"
+    );
+
+    const thankYouImageUrl = await uploadImageToCloudinary(
+      body.thankYouPage.thankYouPageImage,
+      "thankyou-page-images"
+    );
+
     const collectionExist = await Collection.findOne({
       collectionId: body.collectionId,
     });
@@ -27,7 +38,12 @@ export async function POST(req: Request) {
 
     const collection = await Collection.create({
       ...body,
+      collectionLogo: collectionLogoUrl,
       createdBy: session.user.id,
+      thankYouPage: {
+        ...body.thankYouPage,
+        thankYouPageImage: thankYouImageUrl,
+      },
     });
 
     await collection.save();

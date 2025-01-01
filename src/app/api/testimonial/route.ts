@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { uploadImageToCloudinary } from "@/lib/cloudinaryUpload";
 import dbConnect from "@/lib/dbConnect";
 import { Collection } from "@/models/collection";
 import { Testimonial } from "@/models/testimonial";
@@ -9,8 +10,25 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
+    const attachmentsUrl = await Promise.all(
+      body.attachments.map((attachment: string) =>
+        uploadImageToCloudinary(attachment, "testimonial-attachments")
+      )
+    );
+
+    let authorPhotoUrl;
+    if (body.authorPhoto) {
+      authorPhotoUrl = await uploadImageToCloudinary(
+        body.authorPhoto,
+        "testimonial-author-photo"
+      );
+      body.authorPhoto = authorPhotoUrl;
+    }
+
     const testimonial = await Testimonial.create({
       ...body,
+      attachments: attachmentsUrl,
+      authorPhoto: authorPhotoUrl,
     });
 
     const newTestimonial = await testimonial.save();

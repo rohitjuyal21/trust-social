@@ -38,7 +38,8 @@ const thankYouPageDefaults = {
   thankYouPageTitle: "Thank You! 🎉",
   thankYouPageMessage:
     "Your testimonial brightens our day! Thanks for being an amazing part of our journey!",
-  thankYouPageImage: "/assets/thankyou.jpg",
+  thankYouPageImage:
+    "https://res.cloudinary.com/rohitjuyal/image/upload/v1735753586/thankyou-page-image/thankyou_waefxw.jpg",
 };
 
 export default function CreateCollectionModal({
@@ -93,13 +94,11 @@ export default function CreateCollectionModal({
         body: JSON.stringify({ collectionId: id }),
       });
       const { exists } = await response.json();
-      console.log("Collection ID exists:", exists);
       if (exists) {
         const randomSuffix = Math.floor(1000 + Math.random() * 9000);
         const newId = `${id}${randomSuffix}`;
         return await ensureUniqueCollectionId(newId);
       }
-      console.log("Collection ID is unique:", id);
       return id;
     } catch (error) {
       console.error("Error checking collectionId uniqueness:", error);

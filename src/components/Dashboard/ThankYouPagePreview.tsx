@@ -33,7 +33,7 @@ export default function ThankYouPagePreview({
             />
           ) : (
             <Image
-              src="/assets/thankyou.jpg"
+              src="https://res.cloudinary.com/rohitjuyal/image/upload/v1735753586/thankyou-page-image/thankyou_waefxw.jpg"
               alt="thankyou"
               width={0}
               height={0}
