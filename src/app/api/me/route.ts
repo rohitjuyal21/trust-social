@@ -23,8 +23,6 @@ export async function PUT(req: Request) {
       { new: true }
     );
 
-    console.log(updatedUser);
-
     await updatedUser.save();
 
     return Response.json(updatedUser, { status: 200 });

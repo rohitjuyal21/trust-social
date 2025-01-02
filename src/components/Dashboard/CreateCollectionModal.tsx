@@ -140,7 +140,6 @@ export default function CreateCollectionModal({
           }),
         });
         const data = await response.json();
-        console.log(data);
 
         if (response.ok) {
           toast.success("Collection updated successfully");
