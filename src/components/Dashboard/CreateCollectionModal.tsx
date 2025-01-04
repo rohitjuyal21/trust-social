@@ -22,6 +22,7 @@ import ThankYouPage from "./ThankYouPage";
 import { toast } from "sonner";
 import { convertToKebabCase } from "@/lib/stringUtils";
 import { ICollection } from "@/types/types";
+import { uploadImageToCloudinary } from "@/lib/uploadImageToCloudinary";
 
 interface CreateCollectionModalProps {
   isOpen: boolean;
@@ -108,8 +109,23 @@ export default function CreateCollectionModal({
 
   const onSubmit = async (values: z.infer<typeof collectionSchema>) => {
     setIsLoading(true);
+
+    const collectionLogoUrl = await uploadImageToCloudinary(
+      values.collectionLogo,
+      "collection-logo"
+    );
+
+    let thankYouPageImageUrl;
+    if (values.thankYouPage.thankYouPageImage) {
+      thankYouPageImageUrl = await uploadImageToCloudinary(
+        values.thankYouPage.thankYouPageImage,
+        "thankyou-page-images"
+      );
+    }
+
     const finalValues = {
       ...values,
+      collectionLogo: collectionLogoUrl,
       thankYouPage: {
         thankYouPageTitle:
           values.thankYouPage.thankYouPageTitle ||
@@ -118,8 +134,7 @@ export default function CreateCollectionModal({
           values.thankYouPage.thankYouPageMessage ||
           thankYouPageDefaults.thankYouPageMessage,
         thankYouPageImage:
-          values.thankYouPage.thankYouPageImage ||
-          thankYouPageDefaults.thankYouPageImage,
+          thankYouPageImageUrl || thankYouPageDefaults.thankYouPageImage,
       },
     };
 

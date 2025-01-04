@@ -30,6 +30,7 @@ import { convertToBase64 } from "@/lib/convertToBase64";
 import AttachmentsField from "./AttachmentsField";
 import LoadingButton from "./LoadingButton";
 import { toast } from "sonner";
+import { uploadImageToCloudinary } from "@/lib/uploadImageToCloudinary";
 
 interface WriteTestimonialModalProps {
   isOpen: boolean;
@@ -64,6 +65,22 @@ export default function WriteTestimonialModal({
   const onSubmit = async (value: Testimonial) => {
     setIsLoading(true);
     try {
+      let attachmentsUrls = [];
+      if (value.attachments) {
+        attachmentsUrls = await Promise.all(
+          value.attachments.map((attachment: string) =>
+            uploadImageToCloudinary(attachment, "testimonial-attachments")
+          )
+        );
+      }
+
+      let authorPhotoUrl;
+      if (value.authorPhoto) {
+        authorPhotoUrl = await uploadImageToCloudinary(
+          value.authorPhoto,
+          "testimonial-author-photo"
+        );
+      }
       const response = await fetch("/api/testimonial", {
         method: "POST",
         headers: {
@@ -71,6 +88,8 @@ export default function WriteTestimonialModal({
         },
         body: JSON.stringify({
           ...value,
+          attachments: attachmentsUrls,
+          authorPhoto: authorPhotoUrl,
           collectionId: collection?._id,
         }),
       });

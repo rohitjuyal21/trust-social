@@ -72,7 +72,7 @@ export default function TestimonialCard({
                       alt={`attachment ${index}`}
                       width={0}
                       height={0}
-                      className="w-full h-full rounded-md"
+                      className="w-auto mx-auto h-full rounded-md"
                     />
                   </div>
                 </ImageViewer>

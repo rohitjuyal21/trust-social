@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    console.log(body);
+
     const collectionExist = await Collection.findOne({
       collectionId: body.collectionId,
     });
@@ -28,6 +28,9 @@ export async function POST(req: Request) {
     const collection = await Collection.create({
       ...body,
       createdBy: session.user.id,
+      thankYouPage: {
+        ...body.thankYouPage,
+      },
     });
 
     await collection.save();
