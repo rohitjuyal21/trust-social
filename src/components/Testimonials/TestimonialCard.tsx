@@ -17,23 +17,19 @@ import {
 interface TestimonialCardProps {
   testimonial: Testimonial;
   theme?: "light" | "dark";
+  isEmbed?: boolean;
 }
 
 export default function TestimonialCard({
   testimonial,
   theme,
+  isEmbed,
 }: TestimonialCardProps) {
   return (
     <Card className="bg-testimonial border-testimonial-border hover:bg-testimonial-hover p-4 break-inside-avoid lg:mb-6 mb-4 rounded-xl flex-1">
       <div className="space-y-4">
         <div className="flex gap-4 items-center">
-          <ImageViewer
-            theme={theme}
-            imageUrl={
-              testimonial.authorPhoto ||
-              `https://api.dicebear.com/9.x/initials/svg?seed=${testimonial.authorName}&chars=1`
-            }
-          >
+          {isEmbed ? (
             <div className="w-14 h-14 rounded-full overflow-hidden">
               <Image
                 src={
@@ -46,7 +42,28 @@ export default function TestimonialCard({
                 className="object-cover w-full h-full"
               />
             </div>
-          </ImageViewer>
+          ) : (
+            <ImageViewer
+              theme={theme}
+              imageUrl={
+                testimonial.authorPhoto ||
+                `https://api.dicebear.com/9.x/initials/svg?seed=${testimonial.authorName}&chars=1`
+              }
+            >
+              <div className="w-14 h-14 rounded-full overflow-hidden">
+                <Image
+                  src={
+                    testimonial.authorPhoto ||
+                    `https://api.dicebear.com/9.x/initials/svg?seed=${testimonial.authorName}&chars=1`
+                  }
+                  alt={testimonial.authorName}
+                  width={0}
+                  height={0}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            </ImageViewer>
+          )}
           <div>
             <h4 className="font-bold">{testimonial.authorName}</h4>
           </div>
@@ -65,17 +82,29 @@ export default function TestimonialCard({
           <CarouselContent className="">
             {testimonial.attachments.map((attachment, index) => (
               <CarouselItem key={index}>
-                <ImageViewer theme={theme} imageUrl={attachment}>
+                {isEmbed ? (
                   <div className="max-h-48 h-full flex items-center w-full">
                     <Image
                       src={attachment}
                       alt={`attachment ${index}`}
                       width={0}
                       height={0}
-                      className="w-auto mx-auto h-full rounded-md"
+                      className="w-full mx-auto h-full rounded-md object-contain"
                     />
                   </div>
-                </ImageViewer>
+                ) : (
+                  <ImageViewer theme={theme} imageUrl={attachment}>
+                    <div className="max-h-48 h-full flex items-center w-full">
+                      <Image
+                        src={attachment}
+                        alt={`attachment ${index}`}
+                        width={0}
+                        height={0}
+                        className="w-full mx-auto h-full rounded-md object-contain"
+                      />
+                    </div>
+                  </ImageViewer>
+                )}
               </CarouselItem>
             ))}
           </CarouselContent>

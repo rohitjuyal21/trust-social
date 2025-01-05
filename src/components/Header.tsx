@@ -19,29 +19,41 @@ export default function Header() {
       transition={{ type: "spring", stiffness: 80, duration: 0.4 }}
       className="p-4 md:px-6 md:py-4  border sticky left-0 w-full h-[72px] z-10 max-w-screen-xl backdrop-blur-lg top-3 rounded-lg"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-1">
         <Link
           href={"/"}
-          className="font-oswald text-2xl font-bold flex items-center gap-0.5"
+          className="font-oswald text-xl sm:text-2xl font-bold flex items-center gap-0.5"
           title="Trust Social"
         >
-          <Logo className="h-9 w-9" />
+          <Logo className="sm:h-9 sm:w-9 h-8 w-8" />
           <h4>TrustSocial</h4>
         </Link>
-
         <div className="flex gap-2 items-center">
-          {/* <ThemeToggle /> */}
           {user ? (
             <ProfileMenu />
           ) : (
             <>
-              {" "}
-              <Button variant="outline" className="rounded-full" asChild>
-                <Link href={"sign-in"}>Sign In</Link>
-              </Button>
-              <Button className="rounded-full" asChild>
-                <Link href={"sign-up"}>Sign Up</Link>
-              </Button>
+              <div className="sm:flex hidden gap-2 items-center ">
+                <Button variant="outline" className="rounded-full" asChild>
+                  <Link href={"sign-in"}>Sign In</Link>
+                </Button>
+                <Button className="rounded-full" asChild>
+                  <Link href={"sign-up"}>Sign Up</Link>
+                </Button>
+              </div>
+              <div className="sm:hidden flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full"
+                  asChild
+                >
+                  <Link href={"sign-in"}>Sign In</Link>
+                </Button>
+                <Button size="sm" className="rounded-full" asChild>
+                  <Link href={"sign-up"}>Sign Up</Link>
+                </Button>
+              </div>
             </>
           )}
         </div>

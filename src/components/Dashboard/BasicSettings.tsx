@@ -98,7 +98,11 @@ export default function BasicSettings({
                 Collection Name <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Collection Name" {...field} />
+                <Input
+                  placeholder="Collection Name"
+                  autoComplete="off"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Public URL is: {process.env.NEXT_PUBLIC_BASE_URL}/
@@ -137,7 +141,11 @@ export default function BasicSettings({
                 Header Title <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Header Title" {...field} />
+                <Input
+                  placeholder="Header Title"
+                  autoComplete="off"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

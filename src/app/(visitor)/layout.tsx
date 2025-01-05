@@ -6,7 +6,9 @@ export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <MainLayout>
       <VisitorHeader />
-      {children}
+      <div className="flex items-center justify-center h-full w-full">
+        {children}
+      </div>
     </MainLayout>
   );
 }

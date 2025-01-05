@@ -6,7 +6,9 @@ export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <MainLayout>
       <Header />
-      <Suspense>{children}</Suspense>
+      <div className="h-full  w-full flex items-center justify-center">
+        <Suspense>{children}</Suspense>
+      </div>
     </MainLayout>
   );
 }

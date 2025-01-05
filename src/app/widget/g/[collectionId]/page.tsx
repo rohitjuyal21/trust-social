@@ -10,6 +10,7 @@ import Logo from "@/components/svg/Logo";
 import { useSearchParams } from "next/navigation";
 import "../../../../styles/embed.css";
 import "iframe-resizer/js/iframeResizer.contentWindow";
+import Loader from "@/components/Loader";
 
 export default function GridWidgetPage({
   params,
@@ -18,11 +19,11 @@ export default function GridWidgetPage({
 }) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [collectionId, setCollectionId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
 
   const searchParams = useSearchParams();
 
-  // Get theme from URL
   const parmasTheme = searchParams.get("theme") || "light";
 
   useEffect(() => {
@@ -40,10 +41,8 @@ export default function GridWidgetPage({
       window.parent.postMessage({ type: "setHeight", height }, "*");
     };
 
-    // Send the height on load
     sendHeight();
 
-    // Observe changes in the DOM and send height updates
     const observer = new MutationObserver(sendHeight);
     observer.observe(document.body, { childList: true, subtree: true });
 
@@ -51,6 +50,7 @@ export default function GridWidgetPage({
   }, []);
 
   const fetchTestimonials = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${baseUrl}/api/testimonial/${collectionId}`
@@ -61,6 +61,8 @@ export default function GridWidgetPage({
       }
     } catch (error) {
       console.log(`Error fetching testimonials: ${error}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,38 +75,47 @@ export default function GridWidgetPage({
   );
 
   return (
-    <div className={`w-full bg-transparent p-4 theme-${parmasTheme}`}>
-      {filteredTestimonials.length > 0 && (
-        <div className="space-y-4">
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
-            {filteredTestimonials.map((testimonial) =>
-              testimonial.isTweet ? (
-                <TweetTestimonialCard
-                  key={testimonial._id}
-                  tweetId={testimonial.tweetId}
-                  paramsTheme={parmasTheme}
-                />
-              ) : (
-                <TestimonialCard
-                  key={testimonial._id}
-                  testimonial={testimonial}
-                />
-              )
-            )}
-          </div>
-          <div className="flex justify-center">
-            <Link
-              href={process.env.NEXT_PUBLIC_BASE_URL!}
-              target="_blank"
-              className="font-oswald text-xl font-semibold flex items-center gap-0.5"
-              title="Trust Social"
-            >
-              <Logo className="h-7 w-7" color="black" />
-              <h4>TrustSocial</h4>
-            </Link>
-          </div>
+    <>
+      {isLoading ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <Loader />
+        </div>
+      ) : (
+        <div className={`w-full bg-transparent p-4 theme-${parmasTheme}`}>
+          {filteredTestimonials.length > 0 && (
+            <div className="space-y-4">
+              <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-6 flex-1">
+                {filteredTestimonials.map((testimonial) =>
+                  testimonial.isTweet ? (
+                    <TweetTestimonialCard
+                      key={testimonial._id}
+                      tweetId={testimonial.tweetId}
+                      paramsTheme={parmasTheme}
+                    />
+                  ) : (
+                    <TestimonialCard
+                      key={testimonial._id}
+                      testimonial={testimonial}
+                      isEmbed={true}
+                    />
+                  )
+                )}
+              </div>
+              <div className="flex justify-center">
+                <Link
+                  href={process.env.NEXT_PUBLIC_BASE_URL!}
+                  target="_blank"
+                  className="font-oswald text-xl font-semibold flex items-center gap-0.5"
+                  title="Trust Social"
+                >
+                  <Logo className="h-7 w-7" color="black" />
+                  <h4>TrustSocial</h4>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }

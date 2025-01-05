@@ -1,5 +1,5 @@
 import { ICollection } from "@/types/types";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card } from "../ui/card";
 import Image from "next/image";
 import CollectionMenu from "./CollectionMenu";
@@ -18,23 +18,6 @@ export default function CollectionCard({
   onEditClick,
 }: CollectionCardProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [testimonials, setTestimonials] = useState(0);
-
-  const fetchTestimonial = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `/api/testimonial/${collection.collectionId}`
-      );
-      const data = await response.json();
-      setTestimonials(data.length);
-    } catch (error) {
-      console.log(`Error fetching testimonials: ${error}`);
-    }
-  }, [collection]);
-
-  useEffect(() => {
-    fetchTestimonial();
-  }, [fetchTestimonial]);
 
   return (
     <Card className="p-4 space-y-4">
@@ -62,7 +45,7 @@ export default function CollectionCard({
       </div>
       <div>
         <p className="text-muted-foreground text-sm">
-          Testimonials: {testimonials}
+          Testimonials: {collection.testimonials.length}
         </p>
       </div>
       <DeleteCollectionDialog

@@ -44,7 +44,7 @@ export default function ShareTestimonialsModal({
           <DialogDescription></DialogDescription>
         </VisuallyHidden.Root>
         <div className="space-y-6">
-          <div className="mt-2 px-4 flex justify-between">
+          <div className="my-4 px-4 flex items-center gap-2 justify-between ">
             <Link
               href={shareLink}
               target="_blank"
@@ -55,8 +55,8 @@ export default function ShareTestimonialsModal({
                 {shareLink}
               </span>
             </Link>
-            <Button onClick={handleCopy}>
-              <Copy className="size-4" /> Copy Link
+            <Button size="sm" onClick={handleCopy} className="text-xs">
+              <Copy className="size-3" /> Copy Link
             </Button>
           </div>
           <div className="space-y-6">
