@@ -49,12 +49,10 @@ export default function ImportTweetModal({
   const onSubmit = async (value: z.infer<typeof tweetSchema>) => {
     setIsLoading(true);
     try {
-      // Fetch the embed code for the tweet
-
       const embedTweet = await fetchEmbedTweet(value.tweet);
 
       if (!embedTweet) {
-        return; // Exit if fetching embed fails
+        return;
       }
 
       const tweetIdMatch = embedTweet.url.match(/status\/(\d+)/);
@@ -66,7 +64,6 @@ export default function ImportTweetModal({
         return;
       }
 
-      // After successfully fetching the embed code, store the tweet in the database
       const response = await fetch("/api/testimonial", {
         method: "POST",
         headers: {
@@ -122,7 +119,11 @@ export default function ImportTweetModal({
                   <FormItem>
                     <FormLabel>Tweet Link</FormLabel>
                     <FormControl>
-                      <Input placeholder="Paste tweet link here" {...field} />
+                      <Input
+                        placeholder="Paste tweet link here"
+                        autoComplete="off"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
